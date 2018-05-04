@@ -1,8 +1,22 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Web3 from 'web3';
 
 class App extends Component {
+
+  constructor (props) {
+    super(props)
+
+    // Initialise web3
+    if (typeof web3 !== 'undefined') {
+      window.web3 = new Web3(window.web3.currentProvider);
+    } else {
+        console.log('No Web3 Detected... using HTTP Provider')
+        window.web3 = new Web3(window.web3.providers.HttpProvider("http://localhost:8545"));
+    }
+  }
+
   render() {
     return (
       <div className="App">

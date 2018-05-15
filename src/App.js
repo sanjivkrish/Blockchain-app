@@ -115,6 +115,23 @@ class App extends Component {
     });
   }
 
+  // Call createToken method from TokenFactory
+  createToken = (desc, srcAddresses, srcAmounts) => {
+    console.log();
+
+    var token = this.state.contractInstance.methods.createToken(desc, srcAddresses, srcAmounts).send({from: window.web3.eth.defaultAccount})
+
+    token.then((result) => {
+      console.log('Token created successfully');
+
+      const tokenAddress = result.events.TokenCreated.returnValues[0];
+      console.log('Token address : ' + tokenAddress);
+    }, function (err) {
+      console.log('Error in sending a method' + err);
+    });
+
+  }
+
   render() {
     return (
       <div className="App">
@@ -130,6 +147,14 @@ class App extends Component {
         </p>
         <p className="App-intro">
           <button onClick={this.checkBalance}>Check balance</button>
+        </p>
+        <p className="App-intro">
+          <button onClick={() => {
+            // Replace hardcoded value with user input
+            this.createToken('wood', [], [])
+            }}>
+            Create Token
+          </button>
         </p>
       </div>
     );

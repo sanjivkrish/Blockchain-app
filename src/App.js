@@ -36,6 +36,20 @@ class App extends Component {
       this.setState({
         account: accs[0]
       })
+      this.checkBalance();
+    });
+  }
+
+  // Get balance from the default account
+  checkBalance = () => {
+    window.web3.eth.getBalance(window.web3.eth.defaultAccount, (error, wei) => {
+      if (!error) {
+          var balance = window.web3.utils.fromWei(wei, 'ether');
+          console.log(balance);
+          this.setState({
+            balance : balance
+          })
+      }
     });
   }
 
@@ -51,6 +65,9 @@ class App extends Component {
         </p>
         <p className="App-intro">
           Balance : <b>{this.state.balance}</b>
+        </p>
+        <p className="App-intro">
+          <button onClick={this.checkBalance}>Check balance</button>
         </p>
       </div>
     );

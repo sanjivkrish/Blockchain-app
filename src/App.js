@@ -6,7 +6,8 @@ import Web3 from 'web3';
 class App extends Component {
   state = {
     account: '',
-    balance: 0
+    balance: 0,
+    contractInstance : {}
   };
 
   constructor (props) {
@@ -37,6 +38,7 @@ class App extends Component {
         account: accs[0]
       })
       this.checkBalance();
+      this.createContractInstance('0x73218674b32Be8e359ee63a4F8898F6103e79d63');
     });
   }
 
@@ -50,6 +52,66 @@ class App extends Component {
             balance : balance
           })
       }
+    });
+  }
+
+  // Create instance of a contract
+  createContractInstance = (contractAdress) => {
+    const abiArray = [
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_description",
+            "type": "string"
+          },
+          {
+            "name": "_source_addresses",
+            "type": "address[]"
+          },
+          {
+            "name": "_source_amounts",
+            "type": "uint256[]"
+          }
+        ],
+        "name": "createToken",
+        "outputs": [
+          {
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "contract_address",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "description",
+            "type": "string"
+          }
+        ],
+        "name": "TokenCreated",
+        "type": "event"
+      }
+    ];
+
+    var contractInstance = new window.web3.eth.Contract(abiArray, contractAdress, {
+      from: window.web3.eth.defaultAccount,
+      gasPrice: '2000000000',
+      gas: 3000000
+    });
+
+    this.setState({
+      contractInstance : contractInstance
     });
   }
 

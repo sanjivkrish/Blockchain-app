@@ -398,3 +398,8 @@ export const createTokenInstance = (tokenAddress) => {
         gas: 3000000
     });
 }
+
+// Increase supply with a given input
+export const increaseSupply = (srcBatches, srcAmounts, amount) => {
+  return tokenInstance.methods.increaseSupply(srcBatches, srcAmounts, amount).send();
+}

@@ -55,3 +55,8 @@ export const createFactoryInstance = (factoryAddress) => {
         gas: 3000000
     });
 }
+
+// create new Token contract from factory instance
+export const createToken = (desc, srcAddresses, srcAmounts) => {
+    return factoryInstance.methods.createToken(desc, srcAddresses, srcAmounts).send();
+  }

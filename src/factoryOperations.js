@@ -59,4 +59,9 @@ export const createFactoryInstance = (factoryAddress) => {
 // create new Token contract from factory instance
 export const createToken = (desc, srcAddresses, srcAmounts) => {
     return factoryInstance.methods.createToken(desc, srcAddresses, srcAmounts).send();
-  }
+}
+
+// get past events from factory instance
+export const getPastEvents = (event, options, callback) => {
+    return factoryInstance.getPastEvents(event, options, callback);
+}

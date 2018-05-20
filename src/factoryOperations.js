@@ -62,6 +62,6 @@ export const createToken = (desc, srcAddresses, srcAmounts) => {
 }
 
 // get past events from factory instance
-export const getPastEvents = (event, options, callback) => {
-    return factoryInstance.getPastEvents(event, options, callback);
+export const getPastEvents = (event, options) => {
+    return factoryInstance.getPastEvents(event, options);
 }

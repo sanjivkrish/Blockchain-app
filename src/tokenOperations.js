@@ -408,3 +408,8 @@ export const increaseSupply = (srcBatches, srcAmounts, amount) => {
 export const getOwner = () => {
   return tokenInstance.methods.getOwner().call();
 }
+
+// Get owner of this token
+export const getTotalSupply = () => {
+  return tokenInstance.methods.getTotalSupply().call();
+}

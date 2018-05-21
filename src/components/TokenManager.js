@@ -1,74 +1,71 @@
 import React from 'react';
-import ListTokens from './ListTokens';
-import CreateToken from './CreateToken';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 
-const styles = theme => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-    margin: theme.spacing.unit,
-  },
-  containerItem: {
-    flexBasis: '50%',
-  },
-  root: theme.mixins.gutters({
-    paddingTop: 16,
-    paddingBottom: 16,
-    marginRight: 32,
-    marginTop: theme.spacing.unit * 3,
-  }),
-  inputContainer: {
-    paddingTop: 8,
-    paddingBottom: 8,
-  },
-});
+function TabContainer(props) {
+  return (
+    <Typography component="div" style={{ padding: 8 * 3 }}>
+      {props.children}
+    </Typography>
+  );
+}
 
-class ComposedTextField extends React.Component {
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+const styles = {
+  root: {
+    flexGrow: 1,
+  },
+};
+
+class CenteredTabs extends React.Component {
+  state = {
+    value: 0,
+  };
+
+  handleChange = (event, value) => {
+    this.setState({ value });
+  };
 
   render() {
     const { classes } = this.props;
+    const { value } = this.state;
 
     return (
-      <div className={classes.container}>
-        <div className={classes.containerItem}>
-            <Paper className={classes.root} elevation={4}>
-              <Typography variant="body1" component="h6">
-                Create a contract for new product
-              <Divider />
-              </Typography>
-              <Typography className={classes.inputContainer} component="div">
-                <CreateToken createToken={this.props.createToken}>
-                </CreateToken>
-              </Typography>
-            </Paper>
-        </div>
-        <div className={classes.containerItem}>
-            <Paper className={classes.root} elevation={4}>
-              <Typography variant="body1" component="h6">
-                Choose an exisiting product
-              <Divider />
-              </Typography>
-              <Typography className={classes.inputContainer} component="div">
-                <ListTokens
-                  pastEvents={this.props.pastEvents}
-                  setTokenAddress={this.props.setTokenAddress}>
-                </ListTokens>
-              </Typography>
-            </Paper>
-        </div>
-      </div>
+      <Paper className={classes.root}>
+        <Tabs
+          value={this.state.value}
+          onChange={this.handleChange}
+          indicatorColor="primary"
+          textColor="primary"
+          centered
+        >
+          <Tab label="Increase Supply" />
+          <Tab label="Transfer" />
+          <Tab label="Split/Merge" />
+          <Tab label="Approve" />
+          <Tab label="Use" />
+          <Tab label="Token Info" />
+        </Tabs>
+        {value === 0 && <TabContainer>Item One</TabContainer>}
+        {value === 1 && <TabContainer>Item Two</TabContainer>}
+        {value === 2 && <TabContainer>Item Three</TabContainer>}
+        {value === 3 && <TabContainer>Item Four</TabContainer>}
+        {value === 4 && <TabContainer>Item Five</TabContainer>}
+        {value === 5 && <TabContainer>Item Six</TabContainer>}
+      </Paper>
     );
   }
 }
 
-ComposedTextField.propTypes = {
+CenteredTabs.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ComposedTextField);
+export default withStyles(styles)(CenteredTabs);

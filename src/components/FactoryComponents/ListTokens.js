@@ -14,6 +14,8 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
+import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
 
 const actionsStyles = theme => ({
   root: {
@@ -105,9 +107,14 @@ const styles = theme => ({
   tableWrapper: {
     overflowX: 'auto',
 	},
-	tableRow: {
-		cursor: 'pointer',
-	},
+  button: {
+    margin: theme.spacing.unit,
+    width: "100%",
+  },
+  rightIcon: {
+    marginLeft: theme.spacing.unit,
+    marginBotton: "0px"
+  },
 });
 
 class CustomPaginationActionsTable extends React.Component {
@@ -145,22 +152,24 @@ class CustomPaginationActionsTable extends React.Component {
           <Table className={classes.table}>
             <TableHead>
                 <TableRow>
-                    <TableCell>Token Address</TableCell>
                     <TableCell>Description</TableCell>
+                    <TableCell>Token Address</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
               {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(n => {
                 return (
-                  <TableRow
-										key={n.id}
-										className={classes.tableRow}
-										onClick={() => {this.selectToken(n.contractAddress, n.desc)}
-										}>
-                    <TableCell component="th" scope="row">
+                  <TableRow key={n.id}>
+                    <TableCell numeric component="th" scope="row"
+                      onClick={() => {this.selectToken(n.contractAddress, n.desc)}}>
+                      <Button className={classes.button}>
+                        {n.desc}
+                        <Icon className={classes.rightIcon} style={{ fontSize: 16 }}>launch</Icon>
+                      </Button>
+                    </TableCell>
+                    <TableCell>
                       {n.contractAddress}
                     </TableCell>
-                    <TableCell numeric>{n.desc}</TableCell>
                   </TableRow>
                 );
               })}

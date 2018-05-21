@@ -4,8 +4,8 @@ import Web3 from 'web3';
 import * as factoryOperations from './factoryOperations';
 import * as tokenOperations from './tokenOperations';
 import AppBar from './components/AppBar';
+import FactoryManager from './components/FactoryManager';
 import TokenManager from './components/TokenManager';
-import ProductManager from './components/ProductManager';
 
 class App extends Component {
   state = {
@@ -134,7 +134,7 @@ class App extends Component {
         tokenDesc : desc
       });
 
-      console.log('Token Instance Created');
+      console.log('Token Instance Created', tokenAddress);
     } else {
       this.setState({
         tokenAddress : null,
@@ -159,17 +159,17 @@ class App extends Component {
               this.state.tokenAddress == null ?
                 (
                   this.state.isPastEventsLoaded ?
-                  <TokenManager
+                  <FactoryManager
                     createToken={this.createToken}
                     pastEvents={this.state.pastEvents}
                     setTokenAddress={this.setTokenAddress}>
-                  </TokenManager>
+                  </FactoryManager>
                   :
                   <div>Loading...</div>
                 )
                 :
-                <ProductManager>
-                </ProductManager>
+                <TokenManager>
+                </TokenManager>
             }
           </div>
           :

@@ -403,3 +403,8 @@ export const createTokenInstance = (tokenAddress) => {
 export const increaseSupply = (srcBatches, srcAmounts, amount) => {
   return tokenInstance.methods.increaseSupply(srcBatches, srcAmounts, amount).send();
 }
+
+// Get owner of this token
+export const getOwner = () => {
+  return tokenInstance.methods.getOwner().call();
+}

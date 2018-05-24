@@ -36,8 +36,8 @@ function ButtonAppBar(props) {
             <Typography variant="title" color="inherit" className={classes.flex}>
               <Button color="inherit" onClick={() => {props.setTokenAddress(null)}}>
                 {props.tokenDesc}
-                <Icon className={classes.icon} style={{ fontSize: 16 }}>
-                  edit_circle
+                <Icon className={classes.icon} style={{ fontSize: 18 }}>
+                  home
                 </Icon>
               </Button>
             </Typography>

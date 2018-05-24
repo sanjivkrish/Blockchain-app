@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
-import TokenInfo from './TokenComponents/TokenInfo';
+import ContractInfo from './TokenComponents/ContractInfo';
 
 function TabContainer(props) {
   return (
@@ -52,14 +52,14 @@ class CenteredTabs extends React.Component {
           <Tab label="Split/Merge" />
           <Tab label="Approve" />
           <Tab label="Use" />
-          <Tab label="Token Info" />
+          <Tab label="Contract Info" />
         </Tabs>
         {value === 0 && <TabContainer>Item One</TabContainer>}
         {value === 1 && <TabContainer>Item Two</TabContainer>}
         {value === 2 && <TabContainer>Item Three</TabContainer>}
         {value === 3 && <TabContainer>Item Four</TabContainer>}
         {value === 4 && <TabContainer>Item Five</TabContainer>}
-        {value === 5 && <TabContainer><TokenInfo></TokenInfo></TabContainer>}
+        {value === 5 && <TabContainer><ContractInfo></ContractInfo></TabContainer>}
       </Paper>
     );
   }

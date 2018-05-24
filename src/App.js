@@ -6,6 +6,8 @@ import * as tokenOperations from './tokenOperations';
 import AppBar from './components/AppBar';
 import FactoryManager from './components/FactoryManager';
 import TokenManager from './components/TokenManager';
+import MDSpinner from 'react-md-spinner';
+
 
 class App extends Component {
   state = {
@@ -165,7 +167,8 @@ class App extends Component {
                     setTokenAddress={this.setTokenAddress}>
                   </FactoryManager>
                   :
-                  <div>Loading...</div>
+                 <MDSpinner className="spinner" size={100} duration={2000}></MDSpinner>
+
                 )
                 :
                 <TokenManager>

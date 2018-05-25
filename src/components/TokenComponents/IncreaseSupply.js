@@ -4,7 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import * as tokenOperations from '../../tokenOperations';
-import * as factoryOperations from '../../factoryOperations';
 import IncreaseSupplyForm from './IncreaseSupplyComponent/IncreaseSupplyForm';
 import ListIngredients from './IncreaseSupplyComponent/ListIngredients';
 
@@ -31,47 +30,21 @@ const styles = theme => ({
 });
 
 class ComposedTextField extends React.Component {
-  state = {
-		sourceContracts : [],
-		sourceContractsAmount : [],
-    sourceTokenList : [],
-    activeToken : null,
-    amount: 1,
-    isPastEventsLoaded : true,
-    pastEvents : null
-	}
 
 	constructor (props) {
-		super(props);
+    super(props);
 
-    this.getPastEvents();
+    this.state = {
+      sourceContracts : [],
+      sourceContractsAmount : [],
+      sourceTokenList : [],
+      activeToken : null,
+      amount: 1,
+      pastEvents : props.pastEvents
+    }
+
 		this.getSourceContracts();
 	}
-
-  // Get past events from an account
-  // Past events are used to collect description of tokens
-  getPastEvents = () => {
-    factoryOperations.getPastEvents('TokenCreated', {
-      fromBlock: 0,
-      toBlock: 'latest'
-    }).then((events) => {
-      var pastEvents = [];
-
-      // Update past events info
-      for (var i = (events.length-1) ; i > 0; i--) {
-        pastEvents.push({
-          id : i,
-          contractAddress : events[i].returnValues[0],
-          desc : events[i].returnValues[1]
-        });
-      }
-
-      this.setState({
-        isPastEventsLoaded : true,
-        pastEvents : pastEvents
-      });
-    })
-  }
 
   // Generate description of each token
   getDescFromPastEvents = (result) => {

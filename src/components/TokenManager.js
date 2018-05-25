@@ -6,6 +6,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import ContractInfo from './TokenComponents/ContractInfo';
+import IncreaseSupply from './TokenComponents/IncreaseSupply';
 
 function TabContainer(props) {
   return (
@@ -54,7 +55,7 @@ class CenteredTabs extends React.Component {
           <Tab label="Use" />
           <Tab label="Contract Info" />
         </Tabs>
-        {value === 0 && <TabContainer>Item One</TabContainer>}
+        {value === 0 && <TabContainer><IncreaseSupply></IncreaseSupply></TabContainer>}
         {value === 1 && <TabContainer>Item Two</TabContainer>}
         {value === 2 && <TabContainer>Item Three</TabContainer>}
         {value === 3 && <TabContainer>Item Four</TabContainer>}

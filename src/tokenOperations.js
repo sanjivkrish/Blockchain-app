@@ -438,3 +438,8 @@ export const getOwner = () => {
 export const getTotalSupply = () => {
   return tokenInstance.methods.getTotalSupply().call();
 }
+
+// Get source contracts of the ingredients
+export const getSourceContracts = () => {
+  return tokenInstance.methods.getSourceContracts().call();
+}

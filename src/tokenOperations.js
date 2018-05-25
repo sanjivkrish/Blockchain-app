@@ -413,6 +413,17 @@ export const createTokenInstance = (tokenAddress) => {
     });
 }
 
+// Create a token contract instance from a token address and return it
+export const getTokenInstance = (tokenAddress) => {
+    var tokenIns= new window.web3.eth.Contract(abiArray, tokenAddress, {
+        from: window.web3.eth.defaultAccount,
+        gasPrice: '2000000000',
+        gas: 3000000
+    });
+
+    return tokenIns;
+}
+
 // Increase supply with a given input
 export const increaseSupply = (srcBatches, srcAmounts, amount) => {
   return tokenInstance.methods.increaseSupply(srcBatches, srcAmounts, amount).send();

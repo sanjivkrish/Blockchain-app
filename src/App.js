@@ -171,7 +171,8 @@ class App extends Component {
 
                 )
                 :
-                <TokenManager>
+                <TokenManager
+                  pastEvents={this.state.pastEvents}>
                 </TokenManager>
             }
           </div>

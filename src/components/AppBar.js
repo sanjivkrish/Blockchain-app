@@ -1,4 +1,5 @@
 import React from 'react';
+import logo from '../scbc.png';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -30,7 +31,9 @@ function ButtonAppBar(props) {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="title" color="inherit" className={classes.flex}>
-            SCBC
+          <div className='logo'>
+            <img src={logo} width='95' height='75' alt=''/>
+            </div>
           </Typography>
           { props.tokenAddress ?
             <Typography variant="title" color="inherit" className={classes.flex}>

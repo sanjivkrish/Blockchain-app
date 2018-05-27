@@ -7,6 +7,7 @@ import AppBar from './components/AppBar';
 import FactoryManager from './components/FactoryManager';
 import TokenManager from './components/TokenManager';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Dialogs from './components/Dialogs';
 
 class App extends Component {
   state = {
@@ -34,11 +35,17 @@ class App extends Component {
     window.web3.eth.getAccounts((err, accs) => {
       if (err != null) {
         console.log('Error fetching your accounts');
+        this.setState({
+          account: 0
+        })
         return
       }
 
       if (accs.length === 0) {
         console.log('No accounts found');
+        this.setState({
+          account: 0
+        })
         return
       }
 
@@ -173,6 +180,9 @@ class App extends Component {
                 </TokenManager>
             }
           </div>
+          :
+          this.state.account === 0 ?
+          <Dialogs></Dialogs>
           :
           <CircularProgress className="loading" size={100}/>
         }

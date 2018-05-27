@@ -37,6 +37,7 @@ class ComposedTextField extends React.Component {
     this.state = {
       sourceContracts : [],
       sourceContractsAmount : [],
+      sourceDesc : [],
       sourceTokenList : [],
       activeToken : null,
       amount: 1,
@@ -70,18 +71,23 @@ class ComposedTextField extends React.Component {
         fromBlock: 0,
         toBlock: 'latest'
       }).then((events) => {
-        if (events.length > 0) {
-          // Insert in the order as simliar as sourceContracts
-          for (var j = 0; j < this.state.sourceContracts.length; j++) {
+        // Insert in the order as simliar as sourceContracts
+        for (var j = 0; j < this.state.sourceContracts.length; j++) {
+          var arr = this.state.sourceTokenList;
+          if (events.length > 0) {
             if (events[0].address === this.state.sourceContracts[j]) {
-              var arr = this.state.sourceTokenList;
-
               arr[j] = events;
 
               this.setState({
                 sourceTokenList: arr
               });
             }
+          } else {
+              arr[j] = [];
+
+              this.setState({
+                sourceTokenList: arr
+              });
           }
         }
       });

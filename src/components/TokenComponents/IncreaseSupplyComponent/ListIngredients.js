@@ -135,7 +135,7 @@ class CustomPaginationActionsTable extends React.Component {
   render() {
     const { classes } = this.props;
     const { rowsPerPage, page } = this.state;
-    var data = this.props.sourceTokenList[this.props.activeToken];
+    var data = this.props.sourceTokenList;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
     return (
@@ -144,7 +144,7 @@ class CustomPaginationActionsTable extends React.Component {
           <Table className={classes.table}>
             <TableHead>
                 <TableRow>
-                    <TableCell>Token ID</TableCell>
+                    <TableCell>{(this.props.title)}</TableCell>
                     <TableCell>Available supply</TableCell>
                 </TableRow>
             </TableHead>

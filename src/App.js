@@ -176,6 +176,8 @@ class App extends Component {
                 </FactoryManager>
                 :
                 <TokenManager
+                  tokenAddress={this.state.tokenAddress}
+                  tokenDesc={this.state.tokenDesc}
                   pastEvents={this.state.pastEvents}>
                 </TokenManager>
             }

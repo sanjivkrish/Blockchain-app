@@ -36,10 +36,13 @@ class ComposedTextField extends React.Component {
     super(props);
 
     this.state = {
+      tokenAddress : props.tokenAddress,
+      tokenDesc : props.tokenDesc,
       sourceContracts : [],
       sourceContractsAmount : [],
       sourceDesc : [],
       sourceTokenList : [],
+      existingTokenList : [],
       activeToken : null,
       amount: 1,
       sourceTokens : [],
@@ -48,6 +51,7 @@ class ComposedTextField extends React.Component {
       isSourceTokenLoaded : false
     }
 
+		this.getTokens();
 		this.getSourceContracts();
 	}
 
@@ -64,6 +68,21 @@ class ComposedTextField extends React.Component {
     }
 
     return desc;
+  };
+
+  getTokens = () => {
+    var tokenIns = tokenOperations.getTokenInstance(this.state.tokenAddress);
+
+    // Generate list of token id's under each ingredients token
+    tokenIns.getPastEvents('AddedBatch', {
+      fromBlock: 0,
+      toBlock: 'latest'
+    }).then((events) => {
+      console.log(events)
+      this.setState({
+        existingTokenList: events
+      });
+    });
   };
 
   getSourceTokenList = () => {
@@ -170,9 +189,16 @@ class ComposedTextField extends React.Component {
     }
 
     if(isValidated) {
+
+      this.setState({
+        isSourceTokenLoaded : false
+      });
+
       tokenOperations.increaseSupply(this.state.sourceTokens, this.state.sourceTokenAmounts, this.state.amount)
       .then((result) => {
         console.log(result);
+        this.getTokens();
+		    this.getSourceContracts();
       });
     } else {
       console.log('Info missing');
@@ -212,12 +238,17 @@ class ComposedTextField extends React.Component {
           </div>
           {
             this.state.activeToken == null ?
-            <div></div>
+            <div className={classes.containerItem}>
+              <ListIngredients
+                title={"Exisiting Tokens - " + this.state.tokenDesc.toUpperCase()}
+                sourceTokenList={this.state.existingTokenList}>
+              </ListIngredients>
+            </div>
             :
             <div className={classes.containerItem}>
               <ListIngredients
-                activeToken={this.state.activeToken}
-                sourceTokenList={this.state.sourceTokenList}>
+                title={"Exisiting Tokens - " + this.state.sourceDesc[this.state.activeToken].toUpperCase()}
+                sourceTokenList={this.state.sourceTokenList[this.state.activeToken]}>
               </ListIngredients>
             </div>
           }

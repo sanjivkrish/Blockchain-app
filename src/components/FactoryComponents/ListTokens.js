@@ -152,7 +152,7 @@ class CustomPaginationActionsTable extends React.Component {
           <Table className={classes.table}>
             <TableHead>
                 <TableRow>
-                    <TableCell>Description</TableCell>
+                    <TableCell>Existing Product</TableCell>
                     <TableCell>Token Address</TableCell>
                 </TableRow>
             </TableHead>

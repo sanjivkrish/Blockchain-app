@@ -49,18 +49,10 @@ class ComposedTextField extends React.Component {
             </Paper>
         </div>
         <div className={classes.containerItem}>
-            <Paper className={classes.root} elevation={4}>
-              <Typography variant="body1" component="h6">
-                Choose an exisiting product
-              <Divider />
-              </Typography>
-              <Typography className={classes.inputContainer} component="div">
-                <ListTokens
-                  pastEvents={this.props.pastEvents}
-                  setTokenAddress={this.props.setTokenAddress}>
-                </ListTokens>
-              </Typography>
-            </Paper>
+          <ListTokens
+            pastEvents={this.props.pastEvents}
+            setTokenAddress={this.props.setTokenAddress}>
+          </ListTokens>
         </div>
       </div>
     );

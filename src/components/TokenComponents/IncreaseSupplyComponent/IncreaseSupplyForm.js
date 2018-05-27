@@ -43,8 +43,8 @@ class ComposedTextField extends React.Component {
 					{
 						this.props.sourceContracts.map((srcAddr, i) => {
 							return (
-								<div key={i}>
-									<FormControl className={classes.formControl} onFocus={() => {this.props.changeActiveToken(i)}} onBlur={() => {this.props.changeActiveToken(null)}}>
+								<div key={i} onClick={(e) => {e.stopPropagation(); this.props.changeActiveToken(i)}}>
+									<FormControl className={classes.formControl}>
 										<InputLabel htmlFor="srcAddress-simple">{this.props.sourceDesc[i]}</InputLabel>
 										<Input id="srcAddress-simple"	type="text" value={this.props.sourceTokens[i]} onChange={this.props.srcTokenChanged(i)}/>
 									</FormControl>

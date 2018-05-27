@@ -218,7 +218,7 @@ class ComposedTextField extends React.Component {
     return (
         this.state.isSourceTokenLoaded ?
         <div className={classes.container}>
-          <div className={classes.containerItem}>
+          <div className={classes.containerItem} onClick={() => {this.changeActiveToken(null)}}>
               <Paper className={classes.root} elevation={4}>
                 <Typography className={classes.inputContainer} component="div">
                   <IncreaseSupplyForm

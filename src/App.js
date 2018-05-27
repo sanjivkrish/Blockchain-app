@@ -51,7 +51,7 @@ class App extends Component {
       this.checkBalance();
 
       // Create instance of a factory contract
-      factoryOperations.createFactoryInstance('0xAaA3551b5d988Da592c0CdA3Bf2D8137D8eDe18A');
+      factoryOperations.createFactoryInstance('0xE07E111DC513d99D50CA1Bbc35729A770fdDdb4d');
 
       // Update past tokens created by user
       this.getPastEvents();
@@ -77,19 +77,21 @@ class App extends Component {
   // Get past events from an account
   getPastEvents = () => {
     factoryOperations.getPastEvents('TokenCreated', {
-      filter: {_from: this.state.account},
       fromBlock: 0,
       toBlock: 'latest'
     }).then((events) => {
       var pastEvents = [];
 
       // Update past events info
-      for (var i = (events.length-1) ; i > 0; i--) {
-        pastEvents.push({
-          id : i,
-          contractAddress : events[i].returnValues[0],
-          desc : events[i].returnValues[1]
-        });
+      for (var i = (events.length-1) ; i >= 0; i--) {
+        // Use current user's token
+        if (events[i].returnValues[2] === this.state.account) {
+          pastEvents.push({
+            id : pastEvents.length+1,
+            contractAddress : events[i].returnValues[0],
+            desc : events[i].returnValues[1]
+          });
+        }
       }
 
       this.setState({

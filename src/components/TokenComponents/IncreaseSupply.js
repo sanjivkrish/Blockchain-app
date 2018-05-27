@@ -41,6 +41,8 @@ class ComposedTextField extends React.Component {
       sourceTokenList : [],
       activeToken : null,
       amount: 1,
+      sourceTokens : [],
+      sourceTokenAmounts : [],
       pastEvents : props.pastEvents
     }
 
@@ -98,10 +100,14 @@ class ComposedTextField extends React.Component {
 	getSourceContracts = () => {
 		tokenOperations.getSourceContracts().then((result) => {
       var sourceDesc = this.getDescFromPastEvents(result);
+      var sourceTokens = Array(sourceDesc.length).fill('');
+      var sourceTokenAmounts = Array(sourceDesc.length).fill(1);
 
 			this.setState({
         sourceContracts: result,
-        sourceDesc: sourceDesc
+        sourceDesc: sourceDesc,
+        sourceTokens: sourceTokens,
+        sourceTokenAmounts: sourceTokenAmounts
       });
 
       this.getSourceTokenList();
@@ -115,12 +121,50 @@ class ComposedTextField extends React.Component {
     });
   };
 
+  // Whenever user changes the source token
+  srcTokenChanged = props => (events) => {
+    var sourceTokens = this.state.sourceTokens;
+
+    sourceTokens[props] = events.target.value;
+
+    this.setState({
+      sourceTokens: sourceTokens
+    });
+  };
+
+  // Whenever user changes the source token amount
+  srcTokenAmtChanged = props => (events) => {
+    var sourceTokenAmounts = this.state.sourceTokenAmounts;
+
+    sourceTokenAmounts[props] = parseInt(events.target.value, 0);
+
+    this.setState({
+      sourceTokenAmounts: sourceTokenAmounts
+    });
+  };
+
   // When Increase supply button is clicked
   increaseSupply = () => {
-    tokenOperations.increaseSupply(this.state.sourceContracts, this.state.sourceContractsAmount, this.state.amount)
-    .then((result) => {
-      console.log(result);
-    });
+    var isValidated = true;
+
+    if (this.state.amount > 0) {
+      for (var i = 0; i < this.state.sourceTokens.length; i++) {
+        if ((this.state.sourceTokens[i] === '') || (this.state.sourceTokenAmounts[i] <= 0)) {
+          isValidated = false;
+        }
+      }
+    } else {
+      isValidated = false
+    }
+
+    if(isValidated) {
+      tokenOperations.increaseSupply(this.state.sourceTokens, this.state.sourceTokenAmounts, this.state.amount)
+      .then((result) => {
+        console.log(result);
+      });
+    } else {
+      console.log('Info missing');
+    }
   }
 
   // When user clicks on ingredient list
@@ -144,7 +188,11 @@ class ComposedTextField extends React.Component {
                   sourceContracts={this.state.sourceContracts}
                   sourceDesc={this.state.sourceDesc}
                   increaseSupply={this.increaseSupply}
-                  changeActiveToken={this.changeActiveToken}>
+                  changeActiveToken={this.changeActiveToken}
+                  sourceTokens={this.state.sourceTokens}
+                  sourceTokenAmounts={this.state.sourceTokenAmounts}
+                  srcTokenChanged={this.srcTokenChanged}
+                  srcTokenAmtChanged={this.srcTokenAmtChanged}>
                 </IncreaseSupplyForm>
               </Typography>
             </Paper>

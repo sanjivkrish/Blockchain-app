@@ -46,11 +46,11 @@ class ComposedTextField extends React.Component {
 								<div key={i}>
 									<FormControl className={classes.formControl} onClick={() => {this.props.changeActiveToken(i)}}>
 										<InputLabel htmlFor="srcAddress-simple">{this.props.sourceDesc[i]}</InputLabel>
-										<Input id="srcAddress-simple"	type="text"/>
+										<Input id="srcAddress-simple"	type="text" value={this.props.sourceTokens[i]} onChange={this.props.srcTokenChanged(i)}/>
 									</FormControl>
 									<FormControl className={classes.formControl}>
 										<InputLabel htmlFor="srcAmount-simple">Amount</InputLabel>
-										<Input id="srcAmount-simple" type="number"/>
+										<Input id="srcAmount-simple" type="number" value={this.props.sourceTokenAmounts[i]} onChange={this.props.srcTokenAmtChanged(i)}/>
 									</FormControl>
 							</div>
 							)

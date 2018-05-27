@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import * as tokenOperations from '../../tokenOperations';
 import IncreaseSupplyForm from './IncreaseSupplyComponent/IncreaseSupplyForm';
 import ListIngredients from './IncreaseSupplyComponent/ListIngredients';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = theme => ({
   container: {
@@ -43,7 +44,8 @@ class ComposedTextField extends React.Component {
       amount: 1,
       sourceTokens : [],
       sourceTokenAmounts : [],
-      pastEvents : props.pastEvents
+      pastEvents : props.pastEvents,
+      isSourceTokenLoaded : false
     }
 
 		this.getSourceContracts();
@@ -92,6 +94,10 @@ class ComposedTextField extends React.Component {
               });
           }
         }
+
+        this.setState({
+          isSourceTokenLoaded: true
+        });
       });
     }
   };
@@ -110,7 +116,13 @@ class ComposedTextField extends React.Component {
         sourceTokenAmounts: sourceTokenAmounts
       });
 
-      this.getSourceTokenList();
+      if (result.length === 0) {
+        this.setState({
+          isSourceTokenLoaded: true
+        });
+      } else {
+        this.getSourceTokenList();
+      }
 		});
   };
 
@@ -178,37 +190,40 @@ class ComposedTextField extends React.Component {
     const { classes } = this.props;
 
     return (
-      <div className={classes.container}>
-        <div className={classes.containerItem}>
-            <Paper className={classes.root} elevation={4}>
-              <Typography className={classes.inputContainer} component="div">
-                <IncreaseSupplyForm
-                  amount={this.state.amount}
-                  amtChanged={this.amtChanged}
-                  sourceContracts={this.state.sourceContracts}
-                  sourceDesc={this.state.sourceDesc}
-                  increaseSupply={this.increaseSupply}
-                  changeActiveToken={this.changeActiveToken}
-                  sourceTokens={this.state.sourceTokens}
-                  sourceTokenAmounts={this.state.sourceTokenAmounts}
-                  srcTokenChanged={this.srcTokenChanged}
-                  srcTokenAmtChanged={this.srcTokenAmtChanged}>
-                </IncreaseSupplyForm>
-              </Typography>
-            </Paper>
-        </div>
-        {
-          this.state.activeToken == null ?
-          <div></div>
-          :
+        this.state.isSourceTokenLoaded ?
+        <div className={classes.container}>
           <div className={classes.containerItem}>
-            <ListIngredients
-              activeToken={this.state.activeToken}
-              sourceTokenList={this.state.sourceTokenList}>
-            </ListIngredients>
+              <Paper className={classes.root} elevation={4}>
+                <Typography className={classes.inputContainer} component="div">
+                  <IncreaseSupplyForm
+                    amount={this.state.amount}
+                    amtChanged={this.amtChanged}
+                    sourceContracts={this.state.sourceContracts}
+                    sourceDesc={this.state.sourceDesc}
+                    increaseSupply={this.increaseSupply}
+                    changeActiveToken={this.changeActiveToken}
+                    sourceTokens={this.state.sourceTokens}
+                    sourceTokenAmounts={this.state.sourceTokenAmounts}
+                    srcTokenChanged={this.srcTokenChanged}
+                    srcTokenAmtChanged={this.srcTokenAmtChanged}>
+                  </IncreaseSupplyForm>
+                </Typography>
+              </Paper>
           </div>
-        }
-      </div>
+          {
+            this.state.activeToken == null ?
+            <div></div>
+            :
+            <div className={classes.containerItem}>
+              <ListIngredients
+                activeToken={this.state.activeToken}
+                sourceTokenList={this.state.sourceTokenList}>
+              </ListIngredients>
+            </div>
+          }
+        </div>
+        :
+        <CircularProgress className="loading" size={100}/>
     );
   }
 }

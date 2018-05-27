@@ -26,7 +26,9 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
-.spinner{
-  margin: 250px 50px 250px 680px;
 
+.loading{
+  position: absolute;
+  left: 45%;
+  top: 45%
 }

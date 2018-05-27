@@ -6,8 +6,7 @@ import * as tokenOperations from './tokenOperations';
 import AppBar from './components/AppBar';
 import FactoryManager from './components/FactoryManager';
 import TokenManager from './components/TokenManager';
-import MDSpinner from 'react-md-spinner';
-
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 class App extends Component {
   state = {
@@ -16,6 +15,7 @@ class App extends Component {
     tokenAddress : null,
     tokenDesc : null,
     isPastEventsLoaded : false,
+    isAccountFound : false,
     pastEvents: []
   };
 
@@ -44,7 +44,8 @@ class App extends Component {
 
       window.web3.eth.defaultAccount = accs[0];
       this.setState({
-        account: accs[0]
+        account: accs[0],
+        isAccountFound: true
       })
 
       // Update Balance of the user
@@ -150,7 +151,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        { this.state.account ?
+        { (this.state.isAccountFound && this.state.isPastEventsLoaded) ?
           <div>
             <AppBar
               tokenAddress={this.state.tokenAddress}
@@ -161,17 +162,11 @@ class App extends Component {
             </AppBar>
             {
               this.state.tokenAddress == null ?
-                (
-                  this.state.isPastEventsLoaded ?
-                  <FactoryManager
-                    createToken={this.createToken}
-                    pastEvents={this.state.pastEvents}
-                    setTokenAddress={this.setTokenAddress}>
-                  </FactoryManager>
-                  :
-                 <MDSpinner className="spinner" size={100} duration={2000}></MDSpinner>
-
-                )
+                <FactoryManager
+                  createToken={this.createToken}
+                  pastEvents={this.state.pastEvents}
+                  setTokenAddress={this.setTokenAddress}>
+                </FactoryManager>
                 :
                 <TokenManager
                   pastEvents={this.state.pastEvents}>
@@ -179,7 +174,7 @@ class App extends Component {
             }
           </div>
           :
-          <div>No account found</div>
+          <CircularProgress className="loading" size={100}/>
         }
       </div>
     );

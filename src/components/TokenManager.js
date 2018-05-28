@@ -51,8 +51,6 @@ class CenteredTabs extends React.Component {
           <Tab label="Increase Supply" />
           <Tab label="Transfer" />
           <Tab label="Split/Merge" />
-          <Tab label="Approve" />
-          <Tab label="Use" />
           <Tab label="Contract Info" />
         </Tabs>
         {value === 0 && <TabContainer>
@@ -60,9 +58,7 @@ class CenteredTabs extends React.Component {
           </TabContainer>}
         {value === 1 && <TabContainer>Item Two</TabContainer>}
         {value === 2 && <TabContainer>Item Three</TabContainer>}
-        {value === 3 && <TabContainer>Item Four</TabContainer>}
-        {value === 4 && <TabContainer>Item Five</TabContainer>}
-        {value === 5 && <TabContainer><ContractInfo></ContractInfo></TabContainer>}
+        {value === 3 && <TabContainer><ContractInfo></ContractInfo></TabContainer>}
       </Paper>
     );
   }

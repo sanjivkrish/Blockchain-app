@@ -42,6 +42,7 @@ class ComposedTextField extends React.Component {
       sourceContractsAmount : [],
       sourceDesc : [],
       sourceTokenList : [],
+      approvedSourceContracts : 0,
       existingTokenList : [],
       activeToken : null,
       amount: 1,
@@ -174,6 +175,43 @@ class ComposedTextField extends React.Component {
     });
   };
 
+  // Check whether Token contract is allowed to use its token
+  isAllowed = (tokenIns, id) => {
+    tokenIns.methods.allowed(id, this.state.tokenAddress).call()
+    .then((isAllowed) => {
+      if (isAllowed) {
+        var approvedSourceContracts = this.state.approvedSourceContracts + 1;
+
+        this.setState({
+          approvedSourceContracts: approvedSourceContracts
+        });
+
+        this.increaseSupply();
+      } else {
+        this.approveTokenContract(tokenIns, id);
+      }
+    });
+  };
+
+  // Source contract must approve token contract to use its token
+  approveTokenContract = (tokenIns, id) => {
+    tokenIns.methods.approve(this.state.tokenAddress, id).send()
+    .then((isApproved) => {
+      if (isApproved) {
+        var approvedSourceContracts = this.state.approvedSourceContracts + 1;
+
+        this.setState({
+          approvedSourceContracts: approvedSourceContracts
+        });
+
+        // Iterate increaseSupply till it succeed
+        this.increaseSupply();
+      } else {
+        console.log('Approval failed');
+      }
+    })
+  };
+
   // When Increase supply button is clicked
   increaseSupply = () => {
     var isValidated = true;
@@ -189,19 +227,30 @@ class ComposedTextField extends React.Component {
     }
 
     if(isValidated) {
-
       this.setState({
         isSourceTokenLoaded : false
       });
 
-      tokenOperations.increaseSupply(this.state.sourceTokens, this.state.sourceTokenAmounts, this.state.amount)
-      .then((result) => {
-        console.log(result);
-        this.getTokens();
-		    this.getSourceContracts();
-      });
-    } else {
-      console.log('Info missing');
+      // Check whether all the source contracts are approved
+      if (this.state.approvedSourceContracts === this.state.sourceTokens.length) {
+        tokenOperations.increaseSupply(this.state.sourceTokens, this.state.sourceTokenAmounts, this.state.amount)
+        .then((result) => {
+          this.setState({
+            approvedSourceContracts: 0
+          });
+
+          this.getTokens();
+          this.getSourceContracts();
+        });
+      } else {
+        var tokenIns = tokenOperations.getTokenInstance(this.state.sourceContracts[this.state.approvedSourceContracts]);
+
+        // Use cut funtion to get 12 bytes tokenID
+        tokenIns.methods.cut(this.state.sourceTokens[this.state.approvedSourceContracts]).call()
+        .then((result) => {
+          this.isAllowed(tokenIns, result[1]);
+        });
+      }
     }
   }
 

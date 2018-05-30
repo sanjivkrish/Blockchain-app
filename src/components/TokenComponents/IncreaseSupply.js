@@ -75,13 +75,14 @@ class ComposedTextField extends React.Component {
     var tokenIns = tokenOperations.getTokenInstance(this.state.tokenAddress);
 
     // Generate list of token id's under each ingredients token
-    tokenIns.getPastEvents('AddedBatch', {
+    tokenIns.getPastEvents('Transfer', {
       fromBlock: 0,
       toBlock: 'latest'
     }).then((events) => {
-      console.log(events)
+      var tokenList = tokenOperations.getTokens(events);
+
       this.setState({
-        existingTokenList: events
+        existingTokenList: tokenList
       });
     });
   };
@@ -91,16 +92,19 @@ class ComposedTextField extends React.Component {
       var tokenIns = tokenOperations.getTokenInstance(this.state.sourceContracts[i]);
 
       // Generate list of token id's under each ingredients token
-      tokenIns.getPastEvents('AddedBatch', {
+      tokenIns.getPastEvents('Transfer', {
         fromBlock: 0,
         toBlock: 'latest'
       }).then((events) => {
+        var tokenList = tokenOperations.getTokens(events);
+
         // Insert in the order as simliar as sourceContracts
         for (var j = 0; j < this.state.sourceContracts.length; j++) {
           var arr = this.state.sourceTokenList;
+
           if (events.length > 0) {
             if (events[0].address === this.state.sourceContracts[j]) {
-              arr[j] = events;
+              arr[j] = tokenList;
 
               this.setState({
                 sourceTokenList: arr

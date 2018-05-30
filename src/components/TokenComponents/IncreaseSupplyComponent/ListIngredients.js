@@ -154,7 +154,7 @@ class CustomPaginationActionsTable extends React.Component {
                 return (
                   <TableRow key={i}>
                     <TableCell style={{fontSize: 11}}>
-                      {n.returnValues[0]}
+                      {n}
                     </TableCell>
                     <TableCell>
                       NA

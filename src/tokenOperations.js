@@ -360,7 +360,7 @@ const abiArray = [
 				"type": "address"
 			},
 			{
-				"indexed": true,
+				"indexed": false,
 				"name": "batchId",
 				"type": "bytes32"
 			}
@@ -442,4 +442,42 @@ export const getTotalSupply = () => {
 // Get source contracts of the ingredients
 export const getSourceContracts = () => {
   return tokenInstance.methods.getSourceContracts().call();
+}
+
+// Sort out existing tokens in a tokenContract
+export const getTokens = (transferList) => {
+  var curUser = window.web3.eth.defaultAccount;
+  var dummyAddr = "0x0000000000000000000000000000000000000000";
+  var returnArr = [];
+  var uniqueArr = [];
+
+  for(var i = 0; i < transferList.length; i++) {
+		if ((uniqueArr.indexOf(transferList[i].returnValues[2]) === -1)
+					&& (transferList[i].returnValues[0] === curUser || transferList[i].returnValues[1] === curUser)) {
+			uniqueArr.push(transferList[i].returnValues[2]);
+		}
+	}
+
+	for(var j = 0; j < uniqueArr.length; j++) {
+		var isQualified = true;
+
+		for (var k = 0; k < transferList.length; k++) {
+			if (transferList[k].returnValues[2] === uniqueArr[j]) {
+				if (transferList[k].returnValues[1] === curUser) {
+					isQualified = true;
+				}
+
+				if ((transferList[k].returnValues[1] === dummyAddr) ||
+						(transferList[k].returnValues[0] === curUser)) {
+					isQualified = false;
+				}
+			}
+		}
+
+		if(isQualified) {
+			returnArr.push(uniqueArr[j]);
+		}
+  }
+
+  return returnArr;
 }

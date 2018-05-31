@@ -17,19 +17,14 @@ const styles = theme => ({
   },
   table: {
 		minWidth: '30%',
-  },
+	},
+	highlight: {
+		backgroundColor: theme.palette.common.black,
+		color: theme.palette.common.white,
+	},
 });
 
 class ComposedTextField extends React.Component {
-
-	constructor (props) {
-		super(props);
-
-		this.state = {
-			data: []
-		};
-	}
-
 	render() {
 		const { classes } = this.props;
 
@@ -38,16 +33,16 @@ class ComposedTextField extends React.Component {
 				<Table className={classes.table}>
 					<TableHead>
 						<TableRow>
-							<TableCell>Batch ID</TableCell>
+							<TableCell>{this.props.tokenDesc} - Batch ID's</TableCell>
 							<TableCell>Available amount</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{this.state.data.map(n => {
+						{this.props.batchList.map((n,i) => {
 							return (
-								<TableRow key={n.id}>
-									<TableCell component="th" scope="row">{n.batchId}</TableCell>
-									<TableCell >{n.batchAmount}</TableCell>
+								<TableRow key={i} style={{cursor: 'pointer'}} onClick={() => {this.props.setActiveBatch(i)}}>
+									<TableCell component="th" scope="row" style={{fontSize: 11}}>{n}</TableCell>
+									<TableCell>{this.props.batchAmount[i]}</TableCell>
 								</TableRow>
 							);
 						})}

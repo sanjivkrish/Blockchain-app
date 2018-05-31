@@ -42,6 +42,7 @@ class ComposedTextField extends React.Component {
       sourceContractsAmount : [],
       sourceDesc : [],
       sourceTokenList : [],
+      existingSrcTokenAmountList : [],
       approvedSourceContracts : 0,
       existingTokenList : [],
       activeToken : null,
@@ -49,7 +50,8 @@ class ComposedTextField extends React.Component {
       sourceTokens : [],
       sourceTokenAmounts : [],
       pastEvents : props.pastEvents,
-      isSourceTokenLoaded : false
+      isSourceTokenLoaded : false,
+      isSourceTokenAmountLoaded : false
     }
 
 		this.getTokens();
@@ -71,6 +73,35 @@ class ComposedTextField extends React.Component {
     return desc;
   };
 
+  // Get amount for each batch in the product
+  getTokenAmonut = () => {
+    var tokenIns = tokenOperations.getTokenInstance(this.state.tokenAddress);
+    var tokenList = this.state.existingTokenList;
+    var tokenLength = this.state.existingTokenAmountList.length;
+
+    if (tokenLength !== tokenList.length) {
+      tokenIns.methods.cut(tokenList[tokenLength]).call()
+        .then((result) => {
+          tokenOperations.getAvailableAmount(result[1])
+          .then((amt) => {
+            var arr = this.state.existingTokenAmountList;
+            arr[tokenLength] = parseInt(amt, 0);
+
+            this.setState({
+              existingTokenAmountList: arr
+            });
+
+            this.getTokenAmonut();
+          });
+        });
+    } else {
+      this.setState({
+        isSourceTokenAmountLoaded: true
+      });
+    }
+  }
+
+  // Get list of tokens for each source contract
   getTokens = () => {
     var tokenIns = tokenOperations.getTokenInstance(this.state.tokenAddress);
 
@@ -82,11 +113,64 @@ class ComposedTextField extends React.Component {
       var tokenList = tokenOperations.getTokens(events);
 
       this.setState({
-        existingTokenList: tokenList
+        existingTokenList: tokenList,
+        isSourceTokenAmountLoaded: false,
+        existingTokenAmountList: []
+      });
+
+      this.getTokenAmonut();
+    });
+  };
+
+  // Get available amount for each source contract
+  getBatchAmount = (srcTokenIdx, batchIdx) => {
+    var tokenIns = tokenOperations.getTokenInstance(this.state.sourceContracts[srcTokenIdx]);
+    var srcBatchList = this.state.sourceTokenList[srcTokenIdx];
+
+    tokenIns.methods.cut(srcBatchList[batchIdx]).call()
+    .then((result) => {
+      tokenIns.methods.getAvailableAmount(result[1]).call()
+      .then((amt) => {
+        var arr = this.state.existingSrcTokenAmountList;
+        arr[srcTokenIdx][batchIdx] = parseInt(amt, 0);
+
+        this.setState({
+          existingSrcTokenAmountList: arr
+        });
+
+        this.getSrcContractTokenAmount();
       });
     });
   };
 
+  // Get amount for each batch in the source contract
+  getSrcContractTokenAmount = () => {
+    var srcTokenAmtList = this.state.existingSrcTokenAmountList;
+    var srcTokenIdx = 0;
+    var batchIdx = 0;
+    var isValidated = false;
+
+    for (var i = 0; i < srcTokenAmtList.length; i++) {
+      for (var j = 0; j < srcTokenAmtList[i].length; j++) {
+        if (srcTokenAmtList[i][j] === 'NA') {
+          isValidated = true;
+          srcTokenIdx = i;
+          batchIdx = j;
+        }
+      }
+    }
+
+    if(isValidated) {
+      this.getBatchAmount(srcTokenIdx, batchIdx);
+    } else {
+      this.setState({
+        isSourceTokenLoaded: true
+      });
+    }
+
+  }
+
+  // Get list of tokens available for each source contract
   getSourceTokenList = () => {
     for(var i = 0; i < this.state.sourceContracts.length; i++) {
       var tokenIns = tokenOperations.getTokenInstance(this.state.sourceContracts[i]);
@@ -97,56 +181,70 @@ class ComposedTextField extends React.Component {
         toBlock: 'latest'
       }).then((events) => {
         var tokenList = tokenOperations.getTokens(events);
+        var isValidated = true;
 
         // Insert in the order as simliar as sourceContracts
         for (var j = 0; j < this.state.sourceContracts.length; j++) {
-          var arr = this.state.sourceTokenList;
+          var srcTokenList = this.state.sourceTokenList;
+          var srcTokenAmtList = this.state.existingSrcTokenAmountList;
 
           if (events.length > 0) {
             if (events[0].address === this.state.sourceContracts[j]) {
-              arr[j] = tokenList;
+              srcTokenList[j] = tokenList;
+              srcTokenAmtList[j] = Array(tokenList.length).fill('NA');
 
               this.setState({
-                sourceTokenList: arr
+                sourceTokenList: srcTokenList,
+                existingSrcTokenAmountList: srcTokenAmtList,
               });
             }
           } else {
-              arr[j] = [];
+            srcTokenList[j] = [];
+            srcTokenAmtList[j] = [];
 
-              this.setState({
-                sourceTokenList: arr
-              });
+            this.setState({
+              sourceTokenList: srcTokenList,
+              existingSrcTokenAmountList: srcTokenAmtList
+            });
           }
         }
 
-        this.setState({
-          isSourceTokenLoaded: true
-        });
+        for (var k = 0; k < this.state.sourceTokenList.length; k++) {
+          if (this.state.sourceTokenList[k] === undefined) {
+            isValidated = false;
+          }
+        }
+
+        if (isValidated) {
+          this.getSrcContractTokenAmount();
+        }
       });
     }
   };
 
 	// Get owner of current active Token
 	getSourceContracts = () => {
-		tokenOperations.getSourceContracts().then((result) => {
-      var sourceDesc = this.getDescFromPastEvents(result);
-      var sourceTokens = Array(sourceDesc.length).fill('');
-      var sourceTokenAmounts = Array(sourceDesc.length).fill(1);
+    tokenOperations.getSourceContracts().then((result) => {
+      tokenOperations.getSourceAmounts().then((srcAmt) => {
+        var sourceDesc = this.getDescFromPastEvents(result);
+        var sourceTokens = Array(sourceDesc.length).fill('');
+        var sourceTokenAmounts = srcAmt;
 
-			this.setState({
-        sourceContracts: result,
-        sourceDesc: sourceDesc,
-        sourceTokens: sourceTokens,
-        sourceTokenAmounts: sourceTokenAmounts
-      });
-
-      if (result.length === 0) {
         this.setState({
-          isSourceTokenLoaded: true
+          sourceContracts: result,
+          sourceDesc: sourceDesc,
+          sourceTokens: sourceTokens,
+          sourceTokenAmounts: sourceTokenAmounts
         });
-      } else {
-        this.getSourceTokenList();
-      }
+
+        if (result.length === 0) {
+          this.setState({
+            isSourceTokenLoaded: true
+          });
+        } else {
+          this.getSourceTokenList();
+        }
+      });
 		});
   };
 
@@ -269,7 +367,7 @@ class ComposedTextField extends React.Component {
     const { classes } = this.props;
 
     return (
-        this.state.isSourceTokenLoaded ?
+        this.state.isSourceTokenLoaded && this.state.isSourceTokenAmountLoaded ?
         <div className={classes.container}>
           <div className={classes.containerItem} onClick={() => {this.changeActiveToken(null)}}>
               <Paper className={classes.root} elevation={4}>
@@ -293,15 +391,17 @@ class ComposedTextField extends React.Component {
             this.state.activeToken == null ?
             <div className={classes.containerItem}>
               <ListIngredients
-                title={"Exisiting Tokens - " + this.state.tokenDesc.toUpperCase()}
-                sourceTokenList={this.state.existingTokenList}>
+                title={"Batch ID - " + this.state.tokenDesc.toUpperCase()}
+                sourceTokenList={this.state.existingTokenList}
+                existingTokenAmountList={this.state.existingTokenAmountList}>
               </ListIngredients>
             </div>
             :
             <div className={classes.containerItem}>
               <ListIngredients
                 title={"Exisiting Tokens - " + this.state.sourceDesc[this.state.activeToken].toUpperCase()}
-                sourceTokenList={this.state.sourceTokenList[this.state.activeToken]}>
+                sourceTokenList={this.state.sourceTokenList[this.state.activeToken]}
+                existingTokenAmountList={this.state.existingSrcTokenAmountList[this.state.activeToken]}>
               </ListIngredients>
             </div>
           }

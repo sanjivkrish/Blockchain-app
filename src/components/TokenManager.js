@@ -60,7 +60,7 @@ class CenteredTabs extends React.Component {
           </TabContainer>}
         {value === 1 && <TabContainer>Item Two</TabContainer>}
         {value === 2 && <TabContainer>Item Three</TabContainer>}
-        {value === 3 && <TabContainer><Barcode tokenAddress={this.props.tokenAddress}></Barcode></TabContainer>}
+        {value === 3 && <TabContainer><Barcode tokenAddress={this.props.tokenAddress} tokenDesc={this.props.tokenDesc}></Barcode></TabContainer>}
         {value === 4 && <TabContainer><ContractInfo></ContractInfo></TabContainer>}
       </Paper>
     );

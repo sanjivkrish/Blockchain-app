@@ -50,7 +50,7 @@ class ComposedTextField extends React.Component {
 									</FormControl>
 									<FormControl className={classes.formControl}>
 										<InputLabel htmlFor="srcAmount-simple">Amount</InputLabel>
-										<Input id="srcAmount-simple" type="number" value={this.props.sourceTokenAmounts[i]} onChange={this.props.srcTokenAmtChanged(i)}/>
+										<Input id="srcAmount-simple" type="number" disabled value={this.props.sourceTokenAmounts[i]} onChange={this.props.srcTokenAmtChanged(i)}/>
 									</FormControl>
 							</div>
 							)

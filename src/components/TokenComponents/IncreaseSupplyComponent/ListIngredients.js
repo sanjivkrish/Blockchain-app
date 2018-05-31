@@ -145,7 +145,7 @@ class CustomPaginationActionsTable extends React.Component {
             <TableHead>
                 <TableRow>
                     <TableCell>{(this.props.title)}</TableCell>
-                    <TableCell>Available supply</TableCell>
+                    <TableCell>Amount</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
@@ -157,7 +157,7 @@ class CustomPaginationActionsTable extends React.Component {
                       {n}
                     </TableCell>
                     <TableCell>
-                      NA
+                      {this.props.existingTokenAmountList[i]}
                     </TableCell>
                   </TableRow>
                 );

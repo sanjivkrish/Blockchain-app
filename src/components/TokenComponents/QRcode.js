@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import ListTokens from './ListTokens.js';
+import ListBatches from './ListBatches.js';
 import * as tokenOperations from '../../tokenOperations';
 
 const styles = theme => ({
@@ -103,12 +103,12 @@ class ComposedTextField extends React.Component {
     return (
       <div className={classes.container}>
         <div className={classes.containerItem}>
-            <ListTokens
+            <ListBatches
 							batchList={this.state.batchList}
 							batchAmount={this.state.batchAmount}
 							tokenDesc={this.props.tokenDesc}
 							setActiveBatch= {this.setActiveBatch}>
-						</ListTokens>
+						</ListBatches>
         </div>
 				{
 					this.state.activeBatch ?

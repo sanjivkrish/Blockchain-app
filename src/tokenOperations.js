@@ -105,6 +105,25 @@ const abiArray = [
 	},
 	{
 		"constant": true,
+		"inputs": [
+			{
+				"name": "tokenId",
+				"type": "bytes12"
+			}
+		],
+		"name": "getAvailableAmount",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
 		"inputs": [],
 		"name": "getOwner",
 		"outputs": [
@@ -185,6 +204,20 @@ const abiArray = [
 			{
 				"name": "",
 				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getSourceAmounts",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256[]"
 			}
 		],
 		"payable": false,
@@ -442,6 +475,11 @@ export const getTotalSupply = () => {
 // Get source contracts of the ingredients
 export const getSourceContracts = () => {
   return tokenInstance.methods.getSourceContracts().call();
+}
+
+// Get source amounts of the ingredients
+export const getSourceAmounts = () => {
+  return tokenInstance.methods.getSourceAmounts().call();
 }
 
 // Sort out existing tokens in a tokenContract

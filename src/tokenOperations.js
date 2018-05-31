@@ -482,6 +482,11 @@ export const getSourceAmounts = () => {
   return tokenInstance.methods.getSourceAmounts().call();
 }
 
+// Get available amounts of the ingredients batch
+export const getAvailableAmount = (tokenId) => {
+  return tokenInstance.methods.getAvailableAmount(tokenId).call();
+}
+
 // Sort out existing tokens in a tokenContract
 export const getTokens = (transferList) => {
   var curUser = window.web3.eth.defaultAccount;

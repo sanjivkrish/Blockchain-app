@@ -7,7 +7,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import ContractInfo from './TokenComponents/ContractInfo';
 import IncreaseSupply from './TokenComponents/IncreaseSupply';
-import Barcode from './TokenComponents/Barcode.js';
+import QRcode from './TokenComponents/QRcode.js';
 
 function TabContainer(props) {
   return (
@@ -52,7 +52,7 @@ class CenteredTabs extends React.Component {
           <Tab label="Increase Supply" />
           <Tab label="Transfer" />
           <Tab label="Split/Merge" />
-          <Tab label="Barcode" />
+          <Tab label="QR code" />
           <Tab label="Contract Info" />
         </Tabs>
         {value === 0 && <TabContainer>
@@ -60,7 +60,7 @@ class CenteredTabs extends React.Component {
           </TabContainer>}
         {value === 1 && <TabContainer>Item Two</TabContainer>}
         {value === 2 && <TabContainer>Item Three</TabContainer>}
-        {value === 3 && <TabContainer><Barcode tokenAddress={this.props.tokenAddress} tokenDesc={this.props.tokenDesc}></Barcode></TabContainer>}
+        {value === 3 && <TabContainer><QRcode tokenAddress={this.props.tokenAddress} tokenDesc={this.props.tokenDesc}></QRcode></TabContainer>}
         {value === 4 && <TabContainer><ContractInfo></ContractInfo></TabContainer>}
       </Paper>
     );

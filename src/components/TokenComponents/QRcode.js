@@ -114,7 +114,7 @@ class ComposedTextField extends React.Component {
 					this.state.activeBatch ?
 					<div className={classes.containerItem}>
 						<div className={classes.containerItem}>
-								<div style={{paddingTop: 16}}>{this.state.activeBatch}</div>
+								<div style={{paddingTop: 32}}>{this.state.activeBatch}</div>
 						</div>
 					</div>
 					:

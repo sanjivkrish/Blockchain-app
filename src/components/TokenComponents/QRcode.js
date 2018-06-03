@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import ListBatches from './ListBatches.js';
+import QRCodeGenerator  from 'qrcode.react';
 import * as tokenOperations from '../../tokenOperations';
 
 const styles = theme => ({
@@ -26,6 +27,9 @@ const styles = theme => ({
     paddingBottom: 0,
     marginTop: 0,
 	},
+	Qrcode: {
+		paddingLeft: '30%',
+	}
 });
 
 class ComposedTextField extends React.Component {
@@ -114,6 +118,7 @@ class ComposedTextField extends React.Component {
 					this.state.activeBatch ?
 					<div className={classes.containerItem}>
 						<div className={classes.containerItem}>
+								<QRCodeGenerator className={classes.Qrcode} value={this.state.activeBatch} />
 								<div style={{paddingTop: 32}}>{this.state.activeBatch}</div>
 						</div>
 					</div>

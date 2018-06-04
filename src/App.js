@@ -29,41 +29,45 @@ class App extends Component {
       window.web3 = new Web3(window.web3.currentProvider);
     } else {
         console.log('No Web3 Detected...');
+
+        this.state.account = 0;
     }
 
-    // Retreive User account info
-    window.web3.eth.getAccounts((err, accs) => {
-      if (err != null) {
-        console.log('Error fetching your accounts');
+    if (typeof web3 !== 'undefined') {
+      // Retreive User account info
+      window.web3.eth.getAccounts((err, accs) => {
+        if (err != null) {
+          console.log('Error fetching your accounts');
+          this.setState({
+            account: 0
+          })
+          return
+        }
+
+        if (accs.length === 0) {
+          console.log('No accounts found');
+          this.setState({
+            account: 0
+          })
+          return
+        }
+
+        window.web3.eth.defaultAccount = accs[0];
         this.setState({
-          account: 0
+          account: accs[0],
+          isAccountFound: true
         })
-        return
-      }
 
-      if (accs.length === 0) {
-        console.log('No accounts found');
-        this.setState({
-          account: 0
-        })
-        return
-      }
+        // Update Balance of the user
+        this.checkBalance();
 
-      window.web3.eth.defaultAccount = accs[0];
-      this.setState({
-        account: accs[0],
-        isAccountFound: true
-      })
+        // Create instance of a factory contract
+        factoryOperations.createFactoryInstance('0x3cAFEE78762f1cB22D71FE154E9F4F013381e768');
 
-      // Update Balance of the user
-      this.checkBalance();
-
-      // Create instance of a factory contract
-      factoryOperations.createFactoryInstance('0x3cAFEE78762f1cB22D71FE154E9F4F013381e768');
-
-      // Update past tokens created by user
-      this.getPastEvents();
-    });
+        // Update past tokens created by user
+        this.getPastEvents();
+      });
+    }
   }
 
   // Get balance from the default account

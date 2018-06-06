@@ -51,7 +51,8 @@ class ComposedTextField extends React.Component {
       sourceTokenAmounts : [],
       pastEvents : props.pastEvents,
       isSourceTokenLoaded : false,
-      isSourceTokenAmountLoaded : false
+      isSourceTokenAmountLoaded : false,
+      statusMessage : "Loading..."
     }
 
 		this.getTokens();
@@ -290,6 +291,10 @@ class ComposedTextField extends React.Component {
 
         this.increaseSupply();
       } else {
+        this.setState({
+          statusMessage : "Providing permission..."
+        });
+
         this.approveTokenContract(tokenIns, id);
       }
     });
@@ -329,12 +334,13 @@ class ComposedTextField extends React.Component {
     }
 
     if(isValidated) {
-      this.setState({
-        isSourceTokenLoaded : false
-      });
 
       // Check whether all the source contracts are approved
       if (this.state.approvedSourceContracts === this.state.sourceTokens.length) {
+        this.setState({
+          isSourceTokenLoaded : false,
+          statusMessage : "Increasing supply..."
+        });
         tokenOperations.increaseSupply(this.state.sourceTokens, this.state.sourceTokenAmounts, this.state.amount)
         .then((result) => {
           this.setState({
@@ -345,6 +351,10 @@ class ComposedTextField extends React.Component {
           this.getSourceContracts();
         });
       } else {
+        this.setState({
+          isSourceTokenLoaded : false,
+          statusMessage : "Validating permission..."
+        });
         var tokenIns = tokenOperations.getTokenInstance(this.state.sourceContracts[this.state.approvedSourceContracts]);
 
         // Use cut funtion to get 12 bytes tokenID
@@ -407,7 +417,10 @@ class ComposedTextField extends React.Component {
           }
         </div>
         :
-        <CircularProgress className="loading" size={100}/>
+        <div className="loading">
+          <CircularProgress size={100}/>
+          <div className="loadingText">{this.state.statusMessage}</div>
+        </div>
     );
   }
 }

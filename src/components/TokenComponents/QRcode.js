@@ -69,12 +69,12 @@ class ComposedTextField extends React.Component {
 				});
 			}
 
-      this.getTokenAmonut();
+      this.getTokenAmount();
     });
 	};
 
 	// Get amount for each batch in the product
-  getTokenAmonut = () => {
+  getTokenAmount = () => {
     var tokenIns = tokenOperations.getTokenInstance(this.state.tokenAddress);
     var batchList = this.state.batchList;
     var tokenLength = this.state.batchAmount.length;
@@ -91,7 +91,7 @@ class ComposedTextField extends React.Component {
               batchAmount: arr
             });
 
-            this.getTokenAmonut();
+            this.getTokenAmount();
           });
         });
     } else {

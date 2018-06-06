@@ -30,5 +30,11 @@
 .loading{
   position: absolute;
   left: 45%;
-  top: 45%
+  top: 35%;
+  text-align: center;
+}
+
+.loadingText{
+  margin-top: 10%;
+  text-align: center;
 }

@@ -17,7 +17,8 @@ class App extends Component {
     tokenDesc : null,
     isPastEventsLoaded : false,
     isAccountFound : false,
-    pastEvents: []
+    pastEvents: [],
+    statusMessage: "Initializing"
   };
 
   constructor (props) {
@@ -190,7 +191,10 @@ class App extends Component {
           this.state.account === 0 ?
           <Dialogs></Dialogs>
           :
-          <CircularProgress className="loading" size={100}/>
+          <div className="loading">
+            <CircularProgress size={100}/>
+            <div className="loadingText">{this.state.statusMessage}</div>
+          </div>
         }
       </div>
     );

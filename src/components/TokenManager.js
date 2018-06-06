@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
@@ -41,7 +40,7 @@ class CenteredTabs extends React.Component {
     const { value } = this.state;
 
     return (
-      <Paper className={classes.root}>
+      <div className={classes.root}>
         <Tabs
           value={this.state.value}
           onChange={this.handleChange}
@@ -62,7 +61,7 @@ class CenteredTabs extends React.Component {
         {value === 2 && <TabContainer>Item Three</TabContainer>}
         {value === 3 && <TabContainer><QRcode tokenAddress={this.props.tokenAddress} tokenDesc={this.props.tokenDesc}></QRcode></TabContainer>}
         {value === 4 && <TabContainer><ContractInfo></ContractInfo></TabContainer>}
-      </Paper>
+      </div>
     );
   }
 }

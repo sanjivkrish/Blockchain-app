@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import ListBatches from './ListBatches.js';
 import QRCodeGenerator  from 'qrcode.react';
 import * as tokenOperations from '../../tokenOperations';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = theme => ({
   container: {
@@ -40,7 +41,8 @@ class ComposedTextField extends React.Component {
 			tokenAddress: props.tokenAddress,
 			batchList: [],
 			batchAmount: [],
-			activeBatch: null
+      activeBatch: null,
+      isTokenAmountLoaded: false
 		};
 
 		this.getTokens();
@@ -92,6 +94,10 @@ class ComposedTextField extends React.Component {
             this.getTokenAmonut();
           });
         });
+    } else {
+      this.setState({
+				isTokenAmountLoaded: true
+			});
     }
 	}
 
@@ -105,6 +111,7 @@ class ComposedTextField extends React.Component {
     const { classes } = this.props;
 
     return (
+      this.state.isTokenAmountLoaded ?
       <div className={classes.container}>
         <div className={classes.containerItem}>
             <ListBatches
@@ -125,6 +132,11 @@ class ComposedTextField extends React.Component {
 					:
 					<div></div>
 				}
+      </div>
+      :
+      <div className="loading">
+        <CircularProgress size={100}/>
+        <div className="loadingText">Loading...</div>
       </div>
     );
   }

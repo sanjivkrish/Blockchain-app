@@ -63,7 +63,7 @@ class App extends Component {
         this.checkBalance();
 
         // Create instance of a factory contract
-        factoryOperations.createFactoryInstance('0x3cAFEE78762f1cB22D71FE154E9F4F013381e768');
+        factoryOperations.createFactoryInstance('0xc19e9db17760b514e14159864a95ae2d77cef50e');
 
         // Update past tokens created by user
         this.getPastEvents();

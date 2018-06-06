@@ -118,7 +118,8 @@ class App extends Component {
   createToken = (desc, srcAddresses, srcAmounts) => {
     // Freeze UI until token is created
     this.setState({
-      isPastEventsLoaded : false
+      isPastEventsLoaded : false,
+      statusMessage : "Creating New Product..."
     });
 
     factoryOperations.createToken(desc, srcAddresses, srcAmounts).then((result) => {

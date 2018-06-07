@@ -6,7 +6,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
 
 const styles = {
   root: {
@@ -22,6 +21,10 @@ const styles = {
     marginLeft: -12,
     marginRight: 20,
   },
+  title: {
+    fontSize: '1rem',
+    marginLeft: '10%',
+  },
 };
 
 function ButtonAppBar(props) {
@@ -32,23 +35,24 @@ function ButtonAppBar(props) {
         <Toolbar>
           <Typography variant="title" color="inherit" className={classes.flex}>
           <div className='logo'>
-            <img src={logo} width='95' height='75' alt=''/>
-            </div>
+            <Button color="inherit" onClick={() => {props.setTokenAddress(null)}}>
+              <img src={logo} width='95' height='75' alt=''/>
+            </Button>
+          </div>
           </Typography>
           { props.tokenAddress ?
             <Typography variant="title" color="inherit" className={classes.flex}>
-              <Button color="inherit" onClick={() => {props.setTokenAddress(null)}}>
-                {props.tokenDesc}
-                <Icon className={classes.icon} style={{ fontSize: 18 }}>
-                  home
-                </Icon>
-              </Button>
+              <span className={classes.title}>
+                {props.tokenDesc.toUpperCase()}
+              </span>
             </Typography>
             :
             <div></div>
           }
-          <Button color="inherit">Acc : {('' + props.accAddress + '').substring(0, 6)+'...'}</Button>
-          <Button color="inherit">Bal : {props.accBalance}</Button>
+          <div>
+            <Button color="inherit">Acc : {('' + props.accAddress + '').substring(0, 6)+'...'}</Button>
+            <Button color="inherit">Bal : {props.accBalance}</Button>
+          </div>
         </Toolbar>
       </AppBar>
     </div>

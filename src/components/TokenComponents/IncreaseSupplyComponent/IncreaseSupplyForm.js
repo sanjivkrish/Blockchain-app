@@ -44,12 +44,26 @@ class ComposedTextField extends React.Component {
 						this.props.sourceContracts.map((srcAddr, i) => {
 							return (
 								<div key={i} onClick={(e) => {e.stopPropagation(); this.props.changeActiveToken(i)}}>
+									{
+										this.props.activeToken === i ?
+										<FormControl error className={classes.formControl} style={{width:"40%"}}>
+											<InputLabel htmlFor="srcAddress-simple">{this.props.sourceDesc[i]}</InputLabel>
+											<Input id="srcAddress-simple"	type="text" disabled
+												style={{fontSize:"0.7rem"}}
+												value={this.props.sourceTokens[i] === ''?"":"..."+this.props.sourceTokens[i].slice(-35)}
+												onChange={this.props.srcTokenChanged(i)}/>
+										</FormControl>
+										:
+										<FormControl className={classes.formControl} style={{width:"40%"}}>
+											<InputLabel htmlFor="srcAddress-simple">{this.props.sourceDesc[i]}</InputLabel>
+											<Input id="srcAddress-simple"	type="text" disabled
+												style={{fontSize:"0.7rem"}}
+												value={this.props.sourceTokens[i] === ''?"":"..."+this.props.sourceTokens[i].slice(-35)}
+												onChange={this.props.srcTokenChanged(i)}/>
+										</FormControl>
+									}
 									<FormControl className={classes.formControl}>
-										<InputLabel htmlFor="srcAddress-simple">{this.props.sourceDesc[i]}</InputLabel>
-										<Input id="srcAddress-simple"	type="text" value={this.props.sourceTokens[i]} onChange={this.props.srcTokenChanged(i)}/>
-									</FormControl>
-									<FormControl className={classes.formControl}>
-										<InputLabel htmlFor="srcAmount-simple">Amount</InputLabel>
+										<InputLabel htmlFor="srcAmount-simple">Required Quantity</InputLabel>
 										<Input id="srcAmount-simple" type="number" disabled value={this.props.sourceTokenAmounts[i]} onChange={this.props.srcTokenAmtChanged(i)}/>
 									</FormControl>
 							</div>

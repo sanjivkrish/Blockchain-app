@@ -111,7 +111,16 @@ const styles = theme => ({
   },
   rightIcon: {
     marginLeft: theme.spacing.unit,
-    marginBotton: "0px"
+    marginBotton: "0px",
+  },
+  validToken: {
+    fontSize: "0.7rem",
+    cursor: "pointer",
+  },
+  invalidToken: {
+    fontSize: "0.7rem",
+    cursor: "pointer",
+    color: "grey",
   },
 });
 
@@ -145,22 +154,42 @@ class CustomPaginationActionsTable extends React.Component {
             <TableHead>
                 <TableRow>
                     <TableCell>{(this.props.title)}</TableCell>
-                    <TableCell>Amount</TableCell>
+                    <TableCell>Available Quantity</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
               {
                 data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((n, i) => {
-                return (
-                  <TableRow key={i}>
-                    <TableCell style={{fontSize: 11}}>
-                      {n}
-                    </TableCell>
-                    <TableCell>
-                      {this.props.existingTokenAmountList[i]}
-                    </TableCell>
-                  </TableRow>
-                );
+                  return (
+                    this.props.minAmount === null ?
+                      <TableRow key={i}>
+                        <TableCell style={{fontSize:"0.7rem"}}>
+                          {n}
+                        </TableCell>
+                        <TableCell>
+                          {this.props.existingTokenAmountList[i]}
+                        </TableCell>
+                      </TableRow>
+                    :
+                      (this.props.existingTokenAmountList[i] < this.props.minAmount) ?
+                      <TableRow key={i}>
+                        <TableCell className={classes.invalidToken}>
+                          {n}
+                        </TableCell>
+                        <TableCell style={{color:"grey"}}>
+                          {this.props.existingTokenAmountList[i]}
+                        </TableCell>
+                      </TableRow>
+                      :
+                      <TableRow key={i}>
+                        <TableCell className={classes.validToken} onClick={() => {this.props.assignToken(n)}}>
+                          {n}
+                        </TableCell>
+                        <TableCell>
+                          {this.props.existingTokenAmountList[i]}
+                        </TableCell>
+                      </TableRow>
+                  );
               })
               }
               {emptyRows > 0 && (

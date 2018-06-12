@@ -165,7 +165,7 @@ class ComposedTextField extends React.Component {
 					<div>
 							<Button variant="raised" color="secondary" className={classes.formControl}
 								onClick={this.createToken}>
-									Create Token
+									Create Token Contract
 							</Button>
 					</div>
         </div>

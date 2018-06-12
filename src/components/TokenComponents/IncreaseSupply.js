@@ -373,6 +373,17 @@ class ComposedTextField extends React.Component {
     });
   }
 
+  // Assign token to the ingredient
+  assignToken = (val) => {
+    var sourceTokens = this.state.sourceTokens;
+
+    sourceTokens[this.state.activeToken] = val;
+
+    this.setState({
+      sourceTokens: sourceTokens
+    });
+  }
+
   render() {
     const { classes } = this.props;
 
@@ -388,6 +399,7 @@ class ComposedTextField extends React.Component {
                     sourceContracts={this.state.sourceContracts}
                     sourceDesc={this.state.sourceDesc}
                     increaseSupply={this.increaseSupply}
+                    activeToken={this.state.activeToken}
                     changeActiveToken={this.changeActiveToken}
                     sourceTokens={this.state.sourceTokens}
                     sourceTokenAmounts={this.state.sourceTokenAmounts}
@@ -401,7 +413,8 @@ class ComposedTextField extends React.Component {
             this.state.activeToken == null ?
             <div className={classes.containerItem}>
               <ListIngredients
-                title={"Batch ID - " + this.state.tokenDesc.toUpperCase()}
+                title={"Batch IDs - " + this.state.tokenDesc.toUpperCase()}
+                minAmount={null}
                 sourceTokenList={this.state.existingTokenList}
                 existingTokenAmountList={this.state.existingTokenAmountList}>
               </ListIngredients>
@@ -409,9 +422,11 @@ class ComposedTextField extends React.Component {
             :
             <div className={classes.containerItem}>
               <ListIngredients
-                title={"Exisiting Tokens - " + this.state.sourceDesc[this.state.activeToken].toUpperCase()}
+                title={"Batch IDs - " + this.state.sourceDesc[this.state.activeToken].toUpperCase()}
+                minAmount={this.state.sourceTokenAmounts[this.state.activeToken]}
                 sourceTokenList={this.state.sourceTokenList[this.state.activeToken]}
-                existingTokenAmountList={this.state.existingSrcTokenAmountList[this.state.activeToken]}>
+                existingTokenAmountList={this.state.existingSrcTokenAmountList[this.state.activeToken]}
+                assignToken={this.assignToken}>
               </ListIngredients>
             </div>
           }

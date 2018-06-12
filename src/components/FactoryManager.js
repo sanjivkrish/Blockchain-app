@@ -43,7 +43,7 @@ class ComposedTextField extends React.Component {
               <Divider />
               </Typography>
               <Typography className={classes.inputContainer} component="div">
-                <CreateToken createToken={this.props.createToken}>
+                <CreateToken createToken={this.props.createToken} pastEvents={this.props.pastEvents}>
                 </CreateToken>
               </Typography>
             </Paper>

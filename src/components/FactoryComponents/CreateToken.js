@@ -5,6 +5,9 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 const styles = theme => ({
   formControl: {
@@ -21,11 +24,16 @@ const styles = theme => ({
 });
 
 class ComposedTextField extends React.Component {
-    state = {
-			desc: '',
-      srcAddresses: [],
-      srcAmounts: []
-    };
+		constructor(props, context) {
+			super(props, context);
+
+			this.state = {
+				data: props.pastEvents,
+				desc: '',
+				srcAddresses: [],
+				srcAmounts: []
+			};
+		}
 	
 		// Update form elements when number of ingredients is changed
 		ingredientsChanged = (event) => {
@@ -104,7 +112,7 @@ class ComposedTextField extends React.Component {
       return (
         <div>
 					<div>
-							<FormControl className={classes.formControl}>
+							<FormControl className={classes.formControl} style={{width:"40%"}}>
 									<InputLabel htmlFor="desc-simple">Description</InputLabel>
 									<Input id="desc-simple" value={this.state.desc} onChange={this.descChanged}/>
 							</FormControl>
@@ -116,13 +124,25 @@ class ComposedTextField extends React.Component {
 								this.state.srcAddresses.map((n, i) => {
 									return (
 										<div key={i}>
-											<FormControl className={classes.formControl}>
-												<InputLabel htmlFor="srcAddress-simple">Source address {i+1}</InputLabel>
-												<Input
-													id="srcAddress-simple"
-													type="text"
+											<FormControl className={classes.formControl} style={{width:"40%"}}>
+												<InputLabel htmlFor="age-simple">Ingredient {i+1}</InputLabel>
+												<Select
 													value={this.state.srcAddresses[i]}
-													onChange={this.srcAdrChanged(i)}/>
+													onChange={this.srcAdrChanged(i)}
+													inputProps={{
+														name: 'ingredient',
+														id: 'ingredient-simple' + i,
+													}}
+												>
+													{
+														this.state.data.map((n,i) => {
+															return (
+																<MenuItem key={i} value={n.contractAddress}>{n.desc}</MenuItem>
+															);
+														})
+													}
+												</Select>
+												<FormHelperText style={{fontSize:"0.62rem"}}>{this.state.srcAddresses[i]}</FormHelperText>
 											</FormControl>
 											<FormControl className={classes.formControl}>
 													<InputLabel htmlFor="srcAmount-simple">Source amount {i+1}</InputLabel>

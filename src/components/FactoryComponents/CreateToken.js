@@ -76,6 +76,11 @@ class ComposedTextField extends React.Component {
 
 		// Update source aamount when user changes it
 		srcAmtChanged = props => events => {
+			// Ingredients amount can never be less than 1
+			if (events.target.value < 1) {
+				return;
+			}
+
 			var srcAmounts = this.state.srcAmounts;
 
 			srcAmounts[props] = events.target.value;

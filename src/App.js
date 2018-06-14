@@ -8,6 +8,7 @@ import FactoryManager from './components/FactoryManager';
 import TokenManager from './components/TokenManager';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialogs from './components/Dialogs';
+import PrintProvider, { NoPrint } from 'react-easy-print';
 
 class App extends Component {
   state = {
@@ -164,6 +165,8 @@ class App extends Component {
   render() {
     return (
       <div>
+        <PrintProvider>
+          <NoPrint>
         { (this.state.isAccountFound && this.state.isPastEventsLoaded) ?
           <div>
             <AppBar
@@ -197,6 +200,8 @@ class App extends Component {
             <div className="loadingText">{this.state.statusMessage}</div>
           </div>
         }
+          </NoPrint>
+        </PrintProvider>
       </div>
     );
   }

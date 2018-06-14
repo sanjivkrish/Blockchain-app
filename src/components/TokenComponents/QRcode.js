@@ -5,6 +5,8 @@ import ListBatches from './ListBatches.js';
 import QRCodeGenerator  from 'qrcode.react';
 import * as tokenOperations from '../../tokenOperations';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Button from '@material-ui/core/Button';
+import PrintProvider, { Print } from 'react-easy-print';
 
 const styles = theme => ({
   container: {
@@ -30,7 +32,11 @@ const styles = theme => ({
 	},
 	Qrcode: {
 		paddingLeft: '30%',
-	}
+	},
+	button: {
+		marginLeft: '35%',
+		marginTop: '3%',
+	},
 });
 
 class ComposedTextField extends React.Component {
@@ -124,10 +130,17 @@ class ComposedTextField extends React.Component {
 				{
 					this.state.activeBatch ?
 					<div className={classes.containerItem}>
-						<div className={classes.containerItem}>
-								<QRCodeGenerator className={classes.Qrcode} value={this.state.activeBatch} />
-								<div style={{paddingTop: 32}}>{this.state.activeBatch}</div>
-						</div>
+            <PrintProvider>
+              <Print main name="foo">
+                <div id="print" className={classes.containerItem}>
+                  <QRCodeGenerator className={classes.Qrcode} value={this.state.activeBatch} />
+                  <div style={{paddingTop: 32}}>{this.state.activeBatch}</div>
+                </div>
+              </Print>
+              <div className={classes.containerItem}>
+                <Button variant="raised" color="secondary" className={classes.button} onClick={() => {window.print()}}>To Print</Button>
+              </div>
+            </PrintProvider>
 					</div>
 					:
 					<div></div>

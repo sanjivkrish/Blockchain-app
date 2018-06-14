@@ -251,8 +251,16 @@ class ComposedTextField extends React.Component {
 
   // Whenever user changes the amount
   amtChanged = (events) => {
+    var amount = this.state.amount;
+    var sourceTokenAmounts = this.state.sourceTokenAmounts;
+
+    for (var i = 0; i < sourceTokenAmounts.length; i++) {
+      sourceTokenAmounts[i] = (sourceTokenAmounts[i] / amount) * events.target.value;
+    }
+
     this.setState({
-      amount: events.target.value
+      amount: events.target.value,
+      sourceTokenAmounts: sourceTokenAmounts
     });
   };
 

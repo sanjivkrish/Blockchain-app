@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import ListBatchesWithCheckbox from './SplitMergeComponents/ListBatchesWithCheckbox';
 import * as tokenOperations from '../../tokenOperations';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import SplitMergeForm from './SplitMergeComponents/SplitMergeForm';
 
 const styles = theme => ({
   container: {
@@ -43,6 +44,7 @@ class ComposedTextField extends React.Component {
 		this.state = {
 			tokenAddress: props.tokenAddress,
 			batchList: [],
+			selectedBatchList: [],
 			batchAmount: [],
       isTokenAmountLoaded: false
 		};
@@ -97,8 +99,17 @@ class ComposedTextField extends React.Component {
     }
 	}
 
+  // gets called everytime a batch is selected by user
   batchSelected = (batchList) => {
-    console.log(batchList);
+    var selectedBatchList = [];
+
+    for (var i = 0; i < batchList.length; i++) {
+      selectedBatchList.push(this.state.batchList[batchList[i]-1]);
+    }
+
+    this.setState({
+      selectedBatchList: selectedBatchList
+    });
 	}
 
   render() {
@@ -108,14 +119,17 @@ class ComposedTextField extends React.Component {
       this.state.isTokenAmountLoaded ?
       <div className={classes.container}>
         <div className={classes.containerItem}>
-            <ListBatchesWithCheckbox
-							batchList={this.state.batchList}
-							batchAmount={this.state.batchAmount}
-							tokenDesc={this.props.tokenDesc}
-							batchSelected= {this.batchSelected}>
-						</ListBatchesWithCheckbox>
+          <ListBatchesWithCheckbox
+            batchList={this.state.batchList}
+            batchAmount={this.state.batchAmount}
+            tokenDesc={this.props.tokenDesc}
+            batchSelected= {this.batchSelected}>
+          </ListBatchesWithCheckbox>
         </div>
         <div className={classes.containerItem}>
+          <SplitMergeForm
+            selectedBatchList={this.state.selectedBatchList}>
+          </SplitMergeForm>
         </div>
       </div>
       :

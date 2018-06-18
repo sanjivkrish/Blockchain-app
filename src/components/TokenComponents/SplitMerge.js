@@ -2,11 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import ListBatchesWithCheckbox from './SplitMergeComponents/ListBatchesWithCheckbox';
-import QRCodeGenerator  from 'qrcode.react';
 import * as tokenOperations from '../../tokenOperations';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Button from '@material-ui/core/Button';
-import PrintProvider, { Print } from 'react-easy-print';
 
 const styles = theme => ({
   container: {

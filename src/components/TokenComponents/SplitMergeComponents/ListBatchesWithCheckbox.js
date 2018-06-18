@@ -168,6 +168,7 @@ class EnhancedTable extends React.Component {
       data: data.sort((a, b) => (a.batchAmount < b.batchAmount ? -1 : 1)),
       page: 0,
 			rowsPerPage: 5,
+			batchSelected: props.batchSelected,
     };
   }
 
@@ -190,9 +191,11 @@ class EnhancedTable extends React.Component {
   handleSelectAllClick = (event, checked) => {
     if (checked) {
       this.setState({ selected: this.state.data.map(n => n.id) });
+      this.state.batchSelected(this.state.data.map(n => n.id));
       return;
     }
     this.setState({ selected: [] });
+    this.state.batchSelected([]);
   };
 
   handleClick = (event, id) => {
@@ -214,6 +217,7 @@ class EnhancedTable extends React.Component {
     }
 
     this.setState({ selected: newSelected });
+    this.state.batchSelected(newSelected);
   };
 
   handleChangePage = (event, page) => {

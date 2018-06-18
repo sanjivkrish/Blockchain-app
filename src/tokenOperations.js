@@ -487,6 +487,11 @@ export const getAvailableAmount = (tokenId) => {
   return tokenInstance.methods.getAvailableAmount(tokenId).call();
 }
 
+// Merge batches into single batch
+export const mergeBatches = (batchList) => {
+  return tokenInstance.methods.merge(batchList).send();
+}
+
 // Sort out existing tokens in a tokenContract
 export const getTokens = (transferList) => {
   var curUser = window.web3.eth.defaultAccount;

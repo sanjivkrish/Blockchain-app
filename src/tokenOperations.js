@@ -492,6 +492,11 @@ export const mergeBatches = (batchList) => {
   return tokenInstance.methods.merge(batchList).send();
 }
 
+// Split a batch into multiple batches
+export const splitBatch = (tokenId, amounts) => {
+  return tokenInstance.methods.split(tokenId, amounts).send();
+}
+
 // Sort out existing tokens in a tokenContract
 export const getTokens = (transferList) => {
   var curUser = window.web3.eth.defaultAccount;

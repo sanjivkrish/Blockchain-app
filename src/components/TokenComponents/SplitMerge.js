@@ -44,7 +44,6 @@ class ComposedTextField extends React.Component {
 			tokenAddress: props.tokenAddress,
 			batchList: [],
 			batchAmount: [],
-      activeBatch: null,
       isTokenAmountLoaded: false
 		};
 
@@ -65,12 +64,6 @@ class ComposedTextField extends React.Component {
       this.setState({
 				batchList: tokenList
 			});
-
-			if (tokenList.length > 0) {
-				this.setState({
-					activeBatch: tokenList[0]
-				});
-			}
 
       this.getTokenAmount();
     });
@@ -104,10 +97,8 @@ class ComposedTextField extends React.Component {
     }
 	}
 
-	setActiveBatch = (idx) => {
-		this.setState({
-			activeBatch : this.state.batchList[idx]
-		});
+  batchSelected = (batchList) => {
+    console.log(batchList);
 	}
 
   render() {
@@ -121,7 +112,7 @@ class ComposedTextField extends React.Component {
 							batchList={this.state.batchList}
 							batchAmount={this.state.batchAmount}
 							tokenDesc={this.props.tokenDesc}
-							setActiveBatch= {this.setActiveBatch}>
+							batchSelected= {this.batchSelected}>
 						</ListBatchesWithCheckbox>
         </div>
         <div className={classes.containerItem}>

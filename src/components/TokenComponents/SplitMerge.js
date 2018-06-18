@@ -112,6 +112,28 @@ class ComposedTextField extends React.Component {
     });
 	}
 
+  // Merge batches into single batch
+  mergeBatches = () => {
+    var selectedBatchList = [];
+
+    for (var i = 0; i < this.state.selectedBatchList.length; i++) {
+      var tokenId = '0x' + this.state.selectedBatchList[i].slice(-24);
+      selectedBatchList.push(tokenId);
+    }
+
+    this.setState({
+      batchList: [],
+      selectedBatchList: [],
+      batchAmount: [],
+      isTokenAmountLoaded: false
+    });
+
+    tokenOperations.mergeBatches(selectedBatchList)
+    .then((result) => {
+      this.getTokens();
+    });
+  }
+
   render() {
     const { classes } = this.props;
 
@@ -128,7 +150,8 @@ class ComposedTextField extends React.Component {
         </div>
         <div className={classes.containerItem}>
           <SplitMergeForm
-            selectedBatchList={this.state.selectedBatchList}>
+            selectedBatchList={this.state.selectedBatchList}
+            mergeBatches={this.mergeBatches}>
           </SplitMergeForm>
         </div>
       </div>

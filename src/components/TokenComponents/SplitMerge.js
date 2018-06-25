@@ -47,7 +47,8 @@ class ComposedTextField extends React.Component {
 			selectedBatchList: [],
 			selectedBatchAmount: [],
 			batchAmount: [],
-      isTokenAmountLoaded: false
+      isTokenAmountLoaded: false,
+      status: 'Loading...'
 		};
 
 		this.getTokens();
@@ -130,7 +131,8 @@ class ComposedTextField extends React.Component {
       selectedBatchList: [],
       selectedBatchAmount: [],
       batchAmount: [],
-      isTokenAmountLoaded: false
+      isTokenAmountLoaded: false,
+      status: 'Merging Batches...'
     });
 
     tokenOperations.mergeBatches(selectedBatchList)
@@ -159,7 +161,8 @@ class ComposedTextField extends React.Component {
       selectedBatchList: [],
       selectedBatchAmount: [],
       batchAmount: [],
-      isTokenAmountLoaded: false
+      isTokenAmountLoaded: false,
+      status: 'Spliting Batches...'
     });
 
     tokenOperations.splitBatch(tokenId, splitAmount)
@@ -194,7 +197,7 @@ class ComposedTextField extends React.Component {
       :
       <div className="loading">
         <CircularProgress size={100}/>
-        <div className="loadingText">Loading...</div>
+        <div className="loadingText">{this.state.status}</div>
       </div>
     );
   }

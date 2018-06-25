@@ -45,6 +45,7 @@ class ComposedTextField extends React.Component {
 			tokenAddress: props.tokenAddress,
 			batchList: [],
 			selectedBatchList: [],
+			selectedBatchAmount: [],
 			batchAmount: [],
       isTokenAmountLoaded: false
 		};
@@ -102,13 +103,16 @@ class ComposedTextField extends React.Component {
   // gets called everytime a batch is selected by user
   batchSelected = (batchList) => {
     var selectedBatchList = [];
+    var selectedBatchAmount = [];
 
     for (var i = 0; i < batchList.length; i++) {
       selectedBatchList.push(this.state.batchList[batchList[i]-1]);
+      selectedBatchAmount.push(this.state.batchAmount[batchList[i]-1]);
     }
 
     this.setState({
-      selectedBatchList: selectedBatchList
+      selectedBatchList: selectedBatchList,
+      selectedBatchAmount: selectedBatchAmount
     });
 	}
 
@@ -124,6 +128,7 @@ class ComposedTextField extends React.Component {
     this.setState({
       batchList: [],
       selectedBatchList: [],
+      selectedBatchAmount: [],
       batchAmount: [],
       isTokenAmountLoaded: false
     });
@@ -151,6 +156,7 @@ class ComposedTextField extends React.Component {
         <div className={classes.containerItem}>
           <SplitMergeForm
             selectedBatchList={this.state.selectedBatchList}
+            selectedBatchAmount={this.state.selectedBatchAmount}
             mergeBatches={this.mergeBatches}>
           </SplitMergeForm>
         </div>

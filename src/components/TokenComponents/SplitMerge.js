@@ -139,6 +139,35 @@ class ComposedTextField extends React.Component {
     });
   }
 
+  // Split batch into multiple batches
+  splitBatch = (splitAmount) => {
+    var sum = 0;
+
+    for (var i = 0; i < splitAmount.length; i++) {
+      sum = sum + splitAmount[i];
+    }
+
+    if (sum !== this.state.selectedBatchAmount[0]) {
+      console.log('invalid split values');
+      return
+    }
+
+    var tokenId = '0x' + this.state.selectedBatchList[0].slice(-24);
+
+    this.setState({
+      batchList: [],
+      selectedBatchList: [],
+      selectedBatchAmount: [],
+      batchAmount: [],
+      isTokenAmountLoaded: false
+    });
+
+    tokenOperations.splitBatch(tokenId, splitAmount)
+    .then((result) => {
+      this.getTokens();
+    });
+  }
+
   render() {
     const { classes } = this.props;
 
@@ -157,6 +186,7 @@ class ComposedTextField extends React.Component {
           <SplitMergeForm
             selectedBatchList={this.state.selectedBatchList}
             selectedBatchAmount={this.state.selectedBatchAmount}
+            splitBatch={this.splitBatch}
             mergeBatches={this.mergeBatches}>
           </SplitMergeForm>
         </div>

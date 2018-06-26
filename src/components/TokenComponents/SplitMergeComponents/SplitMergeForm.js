@@ -89,8 +89,6 @@ class ComposedTextField extends React.Component {
 								<Button variant="raised" color="secondary" className={classes.formControl} disabled>
 									Merge
 								</Button>
-							</div>
-							<div className={classes.containerItem}>
 								<Button variant="raised" color="secondary" className={classes.formControl} disabled>
 									Split
 								</Button>
@@ -103,11 +101,11 @@ class ComposedTextField extends React.Component {
 								<Button variant="raised" color="secondary" className={classes.formControl} disabled>
 									Merge
 								</Button>
-							</div>
-							<div className={classes.containerItem}>
 								<Button variant="raised" color="secondary" className={classes.formControl} onClick={() => {this.props.splitBatch(this.state.splitAmount)}}>
 									Split
 								</Button>
+							</div>
+							<div className={classes.containerItem}>
 								<FormControl className={classes.formControl}>
 									<InputLabel htmlFor="srcAmount-simple">Split into</InputLabel>
 									<Input
@@ -121,7 +119,7 @@ class ComposedTextField extends React.Component {
 										return (
 											<div key={i}>
 												<FormControl className={classes.formControl}>
-													<InputLabel htmlFor="srcAmount-simple">Split into</InputLabel>
+													<InputLabel htmlFor="srcAmount-simple">Batch {i+1}</InputLabel>
 													<Input
 														id="srcAmount-simple"
 														type="number"
@@ -140,8 +138,6 @@ class ComposedTextField extends React.Component {
 								<Button variant="raised" color="secondary" className={classes.formControl} onClick={this.props.mergeBatches}>
 									Merge
 								</Button>
-							</div>
-							<div className={classes.containerItem}>
 								<Button variant="raised" color="secondary" className={classes.formControl} disabled>
 									Split
 								</Button>

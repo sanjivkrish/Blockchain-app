@@ -497,6 +497,11 @@ export const splitBatch = (tokenId, amounts) => {
   return tokenInstance.methods.split(tokenId, amounts).send();
 }
 
+// Transfer a batch/batches to another user
+export const transferBatches = (batchList, receiverAddr) => {
+  return tokenInstance.methods.transfer(batchList, receiverAddr).send();
+}
+
 // Sort out existing tokens in a tokenContract
 export const getTokens = (transferList) => {
   var curUser = window.web3.eth.defaultAccount;

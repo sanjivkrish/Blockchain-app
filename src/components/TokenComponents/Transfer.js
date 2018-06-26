@@ -117,6 +117,35 @@ class ComposedTextField extends React.Component {
     });
 	}
 
+  // Transfer batches to another user
+  transferBatch = (receiverAddr) => {
+    var selectedBatchList = [];
+
+    if (receiverAddr === '') {
+      console.log('Empty address');
+      return;
+    }
+
+    for (var i = 0; i < this.state.selectedBatchList.length; i++) {
+      var tokenId = '0x' + this.state.selectedBatchList[i].slice(-24);
+      selectedBatchList.push(tokenId);
+    }
+
+    this.setState({
+      batchList: [],
+      selectedBatchList: [],
+      selectedBatchAmount: [],
+      batchAmount: [],
+      isTokenAmountLoaded: false,
+      status: 'Transferring Batch(es)...'
+    });
+
+    tokenOperations.transferBatches(selectedBatchList, receiverAddr)
+    .then((result) => {
+      this.getTokens();
+    });
+	};
+
 
   render() {
     const { classes } = this.props;
@@ -134,7 +163,8 @@ class ComposedTextField extends React.Component {
         </div>
         <div className={classes.containerItem}>
           <TransferForm
-						selectedBatchList={this.state.selectedBatchList}>
+						selectedBatchList={this.state.selectedBatchList}
+            transferBatch={this.transferBatch}>
           </TransferForm>
         </div>
       </div>

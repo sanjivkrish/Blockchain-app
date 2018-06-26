@@ -55,21 +55,36 @@ class ComposedTextField extends React.Component {
   
       return (
         <div className={classes.container}>
-					<div className={classes.containerItem}>
-						<FormControl className={classes.formControl} style={{width:"80%"}}>
-							<InputLabel htmlFor="sendAddr-simple">Send to</InputLabel>
-							<Input
-								id="sendAddr-simple"
-								type="string"
-								value={this.state.senderAddress}
-								onChange={this.senderAddressChanged}/>
-						</FormControl>
-					</div>
-					<div className={classes.containerItem}>
-						<Button variant="raised" color="secondary" className={classes.formControl} disabled>
-							Transfer
-						</Button>
+					{
+						this.props.selectedBatchList.length === 0 ?
+						<div className={classes.containerItem}>
+							<FormControl className={classes.formControl} style={{width:"80%"}} disabled>
+								<InputLabel htmlFor="sendAddr-simple">Send to</InputLabel>
+								<Input
+									id="sendAddr-simple"
+									type="string"
+									value={this.state.senderAddress}
+									onChange={this.senderAddressChanged}/>
+							</FormControl>
+							<Button variant="raised" color="secondary" className={classes.formControl} disabled>
+								Transfer
+							</Button>
+						</div>
+						:
+						<div className={classes.containerItem}>
+							<FormControl className={classes.formControl} style={{width:"80%"}}>
+								<InputLabel htmlFor="sendAddr-simple">Send to</InputLabel>
+								<Input
+									id="sendAddr-simple"
+									type="string"
+									value={this.state.senderAddress}
+									onChange={this.senderAddressChanged}/>
+							</FormControl>
+							<Button variant="raised" color="secondary" className={classes.formControl}>
+								Transfer
+							</Button>
         	</div>
+					}
         </div>
       );
     }

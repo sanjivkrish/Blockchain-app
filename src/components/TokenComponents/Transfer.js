@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import ListBatchesWithCheckbox from './SplitMergeComponents/ListBatchesWithCheckbox';
 import * as tokenOperations from '../../tokenOperations';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import SplitMergeForm from './SplitMergeComponents/SplitMergeForm';
+import TransferForm from './TransferComponents/TransferForm';
 
 const styles = theme => ({
   container: {
@@ -133,7 +133,9 @@ class ComposedTextField extends React.Component {
           </ListBatchesWithCheckbox>
         </div>
         <div className={classes.containerItem}>
-          Transfer Form
+          <TransferForm
+						selectedBatchList={this.state.selectedBatchList}>
+          </TransferForm>
         </div>
       </div>
       :

@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import IncreaseSupply from './TokenComponents/IncreaseSupply';
 import QRcode from './TokenComponents/QRcode.js';
 import SplitMerge from './TokenComponents/SplitMerge.js';
+import Transfer from './TokenComponents/Transfer.js';
 
 function TabContainer(props) {
   return (
@@ -56,7 +57,9 @@ class CenteredTabs extends React.Component {
         {value === 0 && <TabContainer>
             <IncreaseSupply pastEvents={this.props.pastEvents} tokenAddress={this.props.tokenAddress} tokenDesc={this.props.tokenDesc}></IncreaseSupply>
           </TabContainer>}
-        {value === 1 && <TabContainer>Item Two</TabContainer>}
+        {value === 1 && <TabContainer>
+            <Transfer tokenAddress={this.props.tokenAddress} tokenDesc={this.props.tokenDesc}></Transfer>
+          </TabContainer>}
         {value === 2 && <TabContainer>
             <SplitMerge tokenAddress={this.props.tokenAddress} tokenDesc={this.props.tokenDesc}></SplitMerge>
           </TabContainer>}

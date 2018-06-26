@@ -292,6 +292,24 @@ const abiArray = [
 		"constant": false,
 		"inputs": [
 			{
+				"name": "tokenIds",
+				"type": "bytes12[]"
+			},
+			{
+				"name": "receiver",
+				"type": "address"
+			}
+		],
+		"name": "transfer",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
 				"name": "tokenId",
 				"type": "bytes12"
 			},
@@ -311,24 +329,6 @@ const abiArray = [
 				"type": "bytes12[]"
 			}
 		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "tokenId",
-				"type": "bytes12"
-			},
-			{
-				"name": "receiver",
-				"type": "address"
-			}
-		],
-		"name": "transfer",
-		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"

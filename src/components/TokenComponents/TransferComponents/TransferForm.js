@@ -35,18 +35,18 @@ class ComposedTextField extends React.Component {
 			super(props, context);
 
 			this.state = {
-				senderAddress : ''
+				receiverAddress : ''
 			};
 		}
 
 		// Update sender address
-		senderAddressChanged = (event) => {
+		receiverAddressChanged = (event) => {
 			if (event.target.value === '') {
 				return
 			}
 
 			this.setState({
-				senderAddress: event.target.value
+				receiverAddress: event.target.value
 			});
 		};
 
@@ -59,12 +59,12 @@ class ComposedTextField extends React.Component {
 						this.props.selectedBatchList.length === 0 ?
 						<div className={classes.containerItem}>
 							<FormControl className={classes.formControl} style={{width:"80%"}} disabled>
-								<InputLabel htmlFor="sendAddr-simple">Send to</InputLabel>
+								<InputLabel htmlFor="receiverAdd-simple">Send to</InputLabel>
 								<Input
-									id="sendAddr-simple"
+									id="receiverAdd-simple"
 									type="string"
-									value={this.state.senderAddress}
-									onChange={this.senderAddressChanged}/>
+									value={this.state.receiverAddress}
+									onChange={this.receiverAddressChanged}/>
 							</FormControl>
 							<Button variant="raised" color="secondary" className={classes.formControl} disabled>
 								Transfer
@@ -73,14 +73,14 @@ class ComposedTextField extends React.Component {
 						:
 						<div className={classes.containerItem}>
 							<FormControl className={classes.formControl} style={{width:"80%"}}>
-								<InputLabel htmlFor="sendAddr-simple">Send to</InputLabel>
+								<InputLabel htmlFor="receiverAddress-simple">Send to</InputLabel>
 								<Input
-									id="sendAddr-simple"
+									id="receiverAddress-simple"
 									type="string"
-									value={this.state.senderAddress}
-									onChange={this.senderAddressChanged}/>
+									value={this.state.receiverAddress}
+									onChange={this.receiverAddressChanged}/>
 							</FormControl>
-							<Button variant="raised" color="secondary" className={classes.formControl}>
+							<Button variant="raised" color="secondary" className={classes.formControl} onClick={() => {this.props.transferBatch(this.state.receiverAddress)}}>
 								Transfer
 							</Button>
         	</div>

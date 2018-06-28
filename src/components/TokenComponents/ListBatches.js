@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import * as tokenOperations from '../../tokenOperations';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableHead from '@material-ui/core/TableHead';
@@ -138,8 +139,60 @@ class CustomPaginationActionsTable extends React.Component {
       page: 0,
       rowsPerPage: 5,
       open: false,
+      counter: null,
+      treeStructure: {},
+      treeValues: {},
     };
   }
+
+  populateTree = (tokenID) => {
+    var contract = tokenID.slice(0, -24);
+    var tokenInstance = tokenOperations.getTokenInstance(contract);
+
+    tokenInstance.getPastEvents('AddedBatch', {
+      fromBlock: 0,
+      toBlock: 'latest'
+    }).then((events) => {
+      for (var i = 0; i < events.length; i++) {
+        if (tokenID === events[i].returnValues[0]) {
+          var treeValue = this.state.treeValues;
+          var treeStructure = this.state.treeStructure;
+
+          for (var j = 0; j < events[i].returnValues[1].length; j++) {
+            this.setState({
+              counter: this.state.counter+1
+            });
+            treeStructure[events[i].returnValues[1][j]] = treeStructure[tokenID] + String(j);
+          }
+
+          this.setState({
+            counter: this.state.counter-1
+          });
+
+          treeValue[tokenID] = {
+            id : tokenID,
+            source_batches : events[i].returnValues[1],
+            amounts : events[i].returnValues[2],
+            timestamp : events[i].returnValues[3],
+          };
+
+          this.setState({
+            treeValues: treeValue,
+            treeStructure: treeStructure,
+          });
+
+          if (this.state.counter === 0) {
+            console.log(this.state.treeStructure);
+            console.log(this.state.treeValues);
+          } else {
+            for (j = 0; j < events[i].returnValues[1].length; j++) {
+              this.populateTree(events[i].returnValues[1][j]);
+            }
+          }
+        }
+      }
+    });
+  };
 
   handleChangePage = (event, page) => {
     this.setState({ page });
@@ -150,7 +203,18 @@ class CustomPaginationActionsTable extends React.Component {
   };
 
   handleClickOpen = (value) => {
-    console.log(this.state.data[value]);
+    var tokenID = this.state.data[value];
+    var treeStructure = {};
+
+    treeStructure[this.state.data[value]] = '0';
+
+    this.setState({
+      counter: 1,
+      treeStructure: treeStructure
+    });
+
+    this.populateTree(tokenID);
+
     this.setState({ open: true });
   };
 
@@ -215,7 +279,7 @@ class CustomPaginationActionsTable extends React.Component {
             <AppBar className={classes.appBar}>
               <Toolbar>
                 <Typography variant="title" color="inherit" className={classes.flex}>
-                  Graph
+                  {this.props.tokenDesc}
                 </Typography>
                 <IconButton color="inherit" onClick={this.handleClose} aria-label="Close">
                   <CloseIcon />

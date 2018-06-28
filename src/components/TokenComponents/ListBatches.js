@@ -14,6 +14,15 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
+import Icon from '@material-ui/core/Icon';
+import Dialog from '@material-ui/core/Dialog';
+import ListItem from '@material-ui/core/ListItem';
+import List from '@material-ui/core/List';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import CloseIcon from '@material-ui/icons/Close';
+import Slide from '@material-ui/core/Slide';
 
 const actionsStyles = theme => ({
   root: {
@@ -105,7 +114,20 @@ const styles = theme => ({
   tableWrapper: {
     overflowX: 'auto',
   },
+  rightIcon: {
+    marginRight: theme.spacing.unit,
+  },
+  appBar: {
+    position: 'relative',
+  },
+  flex: {
+    flex: 1,
+  },
 });
+
+function Transition(props) {
+  return <Slide direction="up" {...props} />;
+}
 
 class CustomPaginationActionsTable extends React.Component {
   constructor(props, context) {
@@ -115,6 +137,7 @@ class CustomPaginationActionsTable extends React.Component {
       data: props.batchList,
       page: 0,
       rowsPerPage: 5,
+      open: false,
     };
   }
 
@@ -126,28 +149,38 @@ class CustomPaginationActionsTable extends React.Component {
     this.setState({ rowsPerPage: event.target.value });
   };
 
+  handleClickOpen = (value) => {
+    console.log(this.state.data[value]);
+    this.setState({ open: true });
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
   render() {
     const { classes } = this.props;
-	const { rowsPerPage, page } = this.state;
-	const data = this.props.batchList;
+    const { rowsPerPage, page } = this.state;
+    const data = this.props.batchList;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
     return (
       <Paper className={classes.root}>
         <div className={classes.tableWrapper}>
           <Table className={classes.table}>
-			<TableHead>
-					<TableRow>
-						<TableCell>{(this.props.tokenDesc)} - Batch ID's</TableCell>
-						<TableCell>Amount</TableCell>
-					</TableRow>
-				</TableHead>
+            <TableHead>
+              <TableRow>
+                <TableCell>{(this.props.tokenDesc)} - Batch ID's</TableCell>
+                <TableCell>Amount</TableCell>
+              </TableRow>
+            </TableHead>
             <TableBody>
               {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((n,i) => {
                 return (
                   <TableRow key={i} style={{cursor: 'pointer'}} onClick={() => {this.props.setActiveBatch(i)}}>
                     <TableCell style={{fontSize: 10}} component="th" scope="row">
-                      {n}
+                      <Icon className={classes.rightIcon} style={{ fontSize: 16 }} onClick={() => {this.handleClickOpen(i)}}>info</Icon>
+                      <span>{n}</span>
                     </TableCell>
                     <TableCell numeric>{this.props.batchAmount[i]}</TableCell>
                   </TableRow>
@@ -173,6 +206,28 @@ class CustomPaginationActionsTable extends React.Component {
               </TableRow>
             </TableFooter>
           </Table>
+          <Dialog
+            fullScreen
+            open={this.state.open}
+            onClose={this.handleClose}
+            TransitionComponent={Transition}
+          >
+            <AppBar className={classes.appBar}>
+              <Toolbar>
+                <Typography variant="title" color="inherit" className={classes.flex}>
+                  Graph
+                </Typography>
+                <IconButton color="inherit" onClick={this.handleClose} aria-label="Close">
+                  <CloseIcon />
+                </IconButton>
+              </Toolbar>
+            </AppBar>
+            <List>
+              <ListItem button>
+                Graph
+              </ListItem>
+            </List>
+          </Dialog>
         </div>
       </Paper>
     );

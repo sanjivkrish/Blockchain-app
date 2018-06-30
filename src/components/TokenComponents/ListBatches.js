@@ -140,11 +140,14 @@ class CustomPaginationActionsTable extends React.Component {
       rowsPerPage: 5,
       open: false,
       counter: null,
-      treeStructure: {},
-      treeValues: {},
+      nodeStructure: {},
+      isGraphLoaded: false,
+      treant : null,
+      config: []
     };
   }
 
+  // Generate tree of ingredients for an input element using recursive stratergy
   populateTree = (tokenID) => {
     var contract = tokenID.slice(0, -24);
     var tokenInstance = tokenOperations.getTokenInstance(contract);
@@ -155,35 +158,37 @@ class CustomPaginationActionsTable extends React.Component {
     }).then((events) => {
       for (var i = 0; i < events.length; i++) {
         if (tokenID === events[i].returnValues[0]) {
-          var treeValue = this.state.treeValues;
-          var treeStructure = this.state.treeStructure;
-
+          // Recure 'populateTree()' with its source batches
           for (var j = 0; j < events[i].returnValues[1].length; j++) {
+            var config = this.state.config;
+            var nodeStructure = this.state.nodeStructure;
+
+            nodeStructure[events[i].returnValues[1][j]] = {
+              parent: nodeStructure[tokenID],
+              text: { name: '0x...'+events[i].returnValues[1][j].slice(-24)}
+            };
+
+            config.push(nodeStructure[events[i].returnValues[1][j]])
+
             this.setState({
-              counter: this.state.counter+1
+              counter: this.state.counter+1,
+              nodeStructure: nodeStructure,
+              config: config
             });
-            treeStructure[events[i].returnValues[1][j]] = treeStructure[tokenID] + String(j);
           }
 
+          // Decrease counter on every source batch identification
           this.setState({
             counter: this.state.counter-1
           });
 
-          treeValue[tokenID] = {
-            id : tokenID,
-            source_batches : events[i].returnValues[1],
-            amounts : events[i].returnValues[2],
-            timestamp : events[i].returnValues[3],
-          };
-
-          this.setState({
-            treeValues: treeValue,
-            treeStructure: treeStructure,
-          });
-
+          // Generate graph when all the elements are listed
           if (this.state.counter === 0) {
-            console.log(this.state.treeStructure);
-            console.log(this.state.treeValues);
+            this.setState({
+              isGraphLoaded : true
+            });
+
+            var treant = new window.Treant(this.state.config);
           } else {
             for (j = 0; j < events[i].returnValues[1].length; j++) {
               this.populateTree(events[i].returnValues[1][j]);
@@ -204,13 +209,25 @@ class CustomPaginationActionsTable extends React.Component {
 
   handleClickOpen = (value) => {
     var tokenID = this.state.data[value];
-    var treeStructure = {};
+    var nodeStructure = {};
+    var config = [{
+      container: "#treesimple",
+      node: {
+        HTMLclass: 'nodeExample1'
+      }
+    }];
 
-    treeStructure[this.state.data[value]] = '0';
+    nodeStructure[tokenID] = {
+      text: { name: '0x...'+tokenID.slice(-24)}
+    };
+
+    config.push(nodeStructure[tokenID])
 
     this.setState({
       counter: 1,
-      treeStructure: treeStructure
+      config: config,
+      nodeStructure: nodeStructure,
+      isGraphLoaded : false
     });
 
     this.populateTree(tokenID);
@@ -286,11 +303,18 @@ class CustomPaginationActionsTable extends React.Component {
                 </IconButton>
               </Toolbar>
             </AppBar>
-            <List>
-              <ListItem button>
-                Graph
-              </ListItem>
-            </List>
+            {
+              this.state.isGraphLoaded ?
+              <List>
+                <ListItem>
+                  <div id="treesimple" ref="treesimple" style={{width:"100%",height:"100%"}}> </div>
+                </ListItem>
+              </List>
+              :
+              <div>
+                Loading...
+              </div>
+            }
           </Dialog>
         </div>
       </Paper>

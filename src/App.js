@@ -95,9 +95,12 @@ class App extends Component {
       toBlock: 'latest'
     }).then((events) => {
       var pastEvents = [];
+      var tokenDescList = {};
 
       // Update past events info
       for (var i = (events.length-1) ; i >= 0; i--) {
+        tokenDescList[events[i].returnValues[0].toLowerCase()] = events[i].returnValues[1];
+
         // Use current user's token
         if (events[i].returnValues[2] === this.state.account) {
           pastEvents.push({
@@ -107,6 +110,9 @@ class App extends Component {
           });
         }
       }
+
+      // Set description of tokens
+      factoryOperations.setDesc(tokenDescList);
 
       this.setState({
         isPastEventsLoaded : true,

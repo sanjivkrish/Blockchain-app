@@ -5,6 +5,7 @@ import ListBatchesWithCheckbox from './SplitMergeComponents/ListBatchesWithCheck
 import * as tokenOperations from '../../tokenOperations';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import SplitMergeForm from './SplitMergeComponents/SplitMergeForm';
+import Snackbar from '@material-ui/core/Snackbar';
 
 const styles = theme => ({
   container: {
@@ -48,7 +49,9 @@ class ComposedTextField extends React.Component {
 			selectedBatchAmount: [],
 			batchAmount: [],
       isTokenAmountLoaded: false,
-      status: 'Loading...'
+      status: 'Loading...',
+      snackbarOpen : false,
+      snackbarText : ""
 		};
 
 		this.getTokens();
@@ -138,6 +141,11 @@ class ComposedTextField extends React.Component {
     tokenOperations.mergeBatches(selectedBatchList)
     .then((result) => {
       this.getTokens();
+
+      this.setState({
+        snackbarText : 'Batches merged',
+        snackbarOpen : true
+      });
     });
   }
 
@@ -168,8 +176,22 @@ class ComposedTextField extends React.Component {
     tokenOperations.splitBatch(tokenId, splitAmount)
     .then((result) => {
       this.getTokens();
+
+      this.setState({
+        snackbarText : 'Batch splitted',
+        snackbarOpen : true
+      });
     });
   }
+
+   // Close snackbar
+   handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({ snackbarOpen: false });
+  };
 
   render() {
     const { classes } = this.props;
@@ -193,6 +215,19 @@ class ComposedTextField extends React.Component {
             mergeBatches={this.mergeBatches}>
           </SplitMergeForm>
         </div>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          open={this.state.snackbarOpen}
+          autoHideDuration={6000}
+          onClose={this.handleClose}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">{this.state.snackbarText}</span>}
+        />
       </div>
       :
       <div className="loading">

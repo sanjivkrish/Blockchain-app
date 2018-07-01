@@ -9,6 +9,7 @@ import TokenManager from './components/TokenManager';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialogs from './components/Dialogs';
 import PrintProvider, { NoPrint } from 'react-easy-print';
+import Snackbar from '@material-ui/core/Snackbar';
 
 class App extends Component {
   state = {
@@ -19,7 +20,9 @@ class App extends Component {
     isPastEventsLoaded : false,
     isAccountFound : false,
     pastEvents: [],
-    statusMessage: "Initializing"
+    statusMessage: "Initializing",
+    snackbarOpen : false,
+    snackbarText : ""
   };
 
   constructor (props) {
@@ -142,7 +145,9 @@ class App extends Component {
 
       this.setState({
         tokenAddress : tokenAddress,
-        tokenDesc : desc
+        tokenDesc : desc,
+        snackbarText : 'New token contract created : ' + desc,
+        snackbarOpen : true
       });
     }, function (err) {
       console.log('Error in sending a method' + err);
@@ -150,16 +155,25 @@ class App extends Component {
 
   }
 
+   // Close snackbar
+   handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({ snackbarOpen: false });
+  };
+
   // Allow child to update token info using setTokenAddress
   setTokenAddress = (tokenAddress, desc) => {
     if (tokenAddress) {
       tokenOperations.createTokenInstance(tokenAddress);
       this.setState({
         tokenAddress : tokenAddress,
-        tokenDesc : desc
+        tokenDesc : desc,
+        snackbarText : 'Selected token contract : ' + desc,
+        snackbarOpen : true
       });
-
-      console.log('Token Instance Created', tokenAddress);
     } else {
       this.setState({
         tokenAddress : null,
@@ -196,6 +210,19 @@ class App extends Component {
                   pastEvents={this.state.pastEvents}>
                 </TokenManager>
             }
+            <Snackbar
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              open={this.state.snackbarOpen}
+              autoHideDuration={6000}
+              onClose={this.handleClose}
+              ContentProps={{
+                'aria-describedby': 'message-id',
+              }}
+              message={<span id="message-id">{this.state.snackbarText}</span>}
+            />
           </div>
           :
           this.state.account === 0 ?

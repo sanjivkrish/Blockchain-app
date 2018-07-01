@@ -1,4 +1,5 @@
 let factoryInstance;
+var tokenDesc = {};
 
 // Create a factory contract instance from a fcatory address
 export const createFactoryInstance = (factoryAddress) => {
@@ -69,4 +70,14 @@ export const createToken = (desc, srcAddresses, srcAmounts) => {
 // get past events from factory instance
 export const getPastEvents = (event, options) => {
     return factoryInstance.getPastEvents(event, options);
+}
+
+// get description of all products
+export const getDesc = () => {
+    return tokenDesc;
+}
+
+// set description for products
+export const setDesc = (tokenDescList) => {
+    tokenDesc = tokenDescList;
 }

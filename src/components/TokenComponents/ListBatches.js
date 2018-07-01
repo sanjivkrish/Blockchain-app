@@ -124,6 +124,9 @@ const styles = theme => ({
   flex: {
     flex: 1,
   },
+  highlightRow: {
+    backgroundColor: 'rgba(0,0,0,0.26)',
+  },
 });
 
 function Transition(props) {
@@ -258,6 +261,15 @@ class CustomPaginationActionsTable extends React.Component {
             <TableBody>
               {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((n,i) => {
                 return (
+                  this.props.activeBatch === n ?
+                  <TableRow key={i} className={classes.highlightRow} style={{cursor: 'pointer'}} onClick={() => {this.props.setActiveBatch(i)}}>
+                    <TableCell style={{fontSize: 10}} component="th" scope="row">
+                      <Icon className={classes.rightIcon} style={{ fontSize: 16 }} onClick={() => {this.handleClickOpen(i)}}>info</Icon>
+                      <span>{n}</span>
+                    </TableCell>
+                    <TableCell numeric>{this.props.batchAmount[i]}</TableCell>
+                  </TableRow>
+                  :
                   <TableRow key={i} style={{cursor: 'pointer'}} onClick={() => {this.props.setActiveBatch(i)}}>
                     <TableCell style={{fontSize: 10}} component="th" scope="row">
                       <Icon className={classes.rightIcon} style={{ fontSize: 16 }} onClick={() => {this.handleClickOpen(i)}}>info</Icon>

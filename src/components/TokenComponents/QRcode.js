@@ -124,6 +124,7 @@ class ComposedTextField extends React.Component {
 							batchList={this.state.batchList}
 							batchAmount={this.state.batchAmount}
 							tokenDesc={this.props.tokenDesc}
+							activeBatch={this.state.activeBatch}
 							setActiveBatch= {this.setActiveBatch}>
 						</ListBatches>
         </div>

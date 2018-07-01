@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import * as tokenOperations from '../../tokenOperations';
+import * as factoryOperations from '../../factoryOperations';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableHead from '@material-ui/core/TableHead';
@@ -161,6 +162,9 @@ class CustomPaginationActionsTable extends React.Component {
     }).then((events) => {
       for (var i = 0; i < events.length; i++) {
         if (tokenID === events[i].returnValues[0]) {
+          // Get description of all products
+          var tokenDesc = factoryOperations.getDesc();
+
           // Recure 'populateTree()' with its source batches
           for (var j = 0; j < events[i].returnValues[1].length; j++) {
             var config = this.state.config;
@@ -168,7 +172,10 @@ class CustomPaginationActionsTable extends React.Component {
 
             nodeStructure[events[i].returnValues[1][j]] = {
               parent: nodeStructure[tokenID],
-              text: { name: '0x...'+events[i].returnValues[1][j].slice(-24)}
+              text: {
+                name: tokenDesc[events[i].returnValues[1][j].slice(0, -24)],
+                desc: '0x...'+events[i].returnValues[1][j].slice(-24)
+              }
             };
 
             config.push(nodeStructure[events[i].returnValues[1][j]])
@@ -221,7 +228,10 @@ class CustomPaginationActionsTable extends React.Component {
     }];
 
     nodeStructure[tokenID] = {
-      text: { name: '0x...'+tokenID.slice(-24)}
+      text: {
+        name: this.props.tokenDesc,
+        desc: '0x...'+tokenID.slice(-24)
+      }
     };
 
     config.push(nodeStructure[tokenID])

@@ -7,6 +7,7 @@ import * as tokenOperations from '../../tokenOperations';
 import IncreaseSupplyForm from './IncreaseSupplyComponent/IncreaseSupplyForm';
 import ListIngredients from './IncreaseSupplyComponent/ListIngredients';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Snackbar from '@material-ui/core/Snackbar';
 
 const styles = theme => ({
   container: {
@@ -52,7 +53,9 @@ class ComposedTextField extends React.Component {
       pastEvents : props.pastEvents,
       isSourceTokenLoaded : false,
       isSourceTokenAmountLoaded : false,
-      statusMessage : "Loading..."
+      statusMessage : "Loading...",
+      snackbarOpen : false,
+      snackbarText : ""
     }
 
 		this.getTokens();
@@ -357,6 +360,10 @@ class ComposedTextField extends React.Component {
 
           this.getTokens();
           this.getSourceContracts();
+          this.setState({
+            snackbarText : 'New Batch added',
+            snackbarOpen : true
+          });
         });
       } else {
         this.setState({
@@ -391,6 +398,15 @@ class ComposedTextField extends React.Component {
       sourceTokens: sourceTokens
     });
   }
+
+  // Close snackbar
+  handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({ snackbarOpen: false });
+  };
 
   render() {
     const { classes } = this.props;
@@ -438,6 +454,19 @@ class ComposedTextField extends React.Component {
               </ListIngredients>
             </div>
           }
+          <Snackbar
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            open={this.state.snackbarOpen}
+            autoHideDuration={6000}
+            onClose={this.handleClose}
+            ContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+            message={<span id="message-id">{this.state.snackbarText}</span>}
+          />
         </div>
         :
         <div className="loading">

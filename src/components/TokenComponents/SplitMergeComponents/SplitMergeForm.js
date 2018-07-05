@@ -44,7 +44,7 @@ class ComposedTextField extends React.Component {
 		splitedCountChanged = (event) => {
 			var splitAmount = [];
 
-			if (event.target.value < 2) {
+			if (event.target.value < 2 || event.target.value > this.props.selectedBatchAmount[0]) {
 				return
 			}
 

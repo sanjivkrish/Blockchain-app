@@ -249,6 +249,11 @@ class CustomPaginationActionsTable extends React.Component {
   };
 
   handleClose = () => {
+    var head= document.getElementsByTagName('head')[0];
+    var script= document.createElement('script');
+    script.src= 'https://cdnjs.cloudflare.com/ajax/libs/treant-js/1.0/Treant.min.js';
+    head.appendChild(script);
+
     this.setState({ open: false });
   };
 
